@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── API 테스트 ───────────────────────────────────────────────────────────
+  api-test:
+    name: API Tests (Python)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: woont
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: woont_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Alembic migrations
+        env:
+          DATABASE_URL: postgresql+asyncpg://woont:testpass@localhost:5432/woont_test
+          JWT_SECRET_KEY: test-secret-key-for-ci-at-least-32-chars
+          ANTHROPIC_API_KEY: sk-ant-test-placeholder
+        run: alembic upgrade head
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://woont:testpass@localhost:5432/woont_test
+          REDIS_URL: redis://localhost:6379/0
+          JWT_SECRET_KEY: test-secret-key-for-ci-at-least-32-chars
+          ANTHROPIC_API_KEY: sk-ant-test-placeholder
+          APP_ENV: test
+        run: |
+          pytest tests/ -v --tb=short --cov=app --cov-report=term-missing \
+            --cov-fail-under=60
+
+  # ── 프론트엔드 빌드 ──────────────────────────────────────────────────────
+  frontend-build:
+    name: Frontend Build (Next.js)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build
+        env:
+          NEXT_PUBLIC_API_URL: https://api.woon-t.com/api/v1
+          NEXT_PUBLIC_TOSS_CLIENT_KEY: test_ck_placeholder_for_ci
+        run: npm run build
+
+  # ── API 린트 (ruff) ──────────────────────────────────────────────────────
+  api-lint:
+    name: API Lint (ruff)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ruff
+        run: pip install ruff==0.8.0
+
+      - name: Ruff check
+        run: ruff check app/ tests/ --output-format=github
+
+      - name: Ruff format check
+        run: ruff format app/ tests/ --check

@@ -1,0 +1,25 @@
+# Ruff 린터 설정
+target-version = "py312"
+line-length = 100
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # Pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (formatter가 처리)
+    "B008",   # do not perform function calls in default arguments (FastAPI Depends)
+    "SIM108", # ternary operator (가독성 우선)
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["S101"]  # assert 허용
+
+[format]
+quote-style = "double"
+indent-style = "space"

@@ -1,0 +1,12 @@
+# 개발 전용 의존성 (프로덕션 이미지에는 포함하지 않음)
+-r requirements.txt
+
+# 린터 / 포맷터
+ruff==0.8.0
+
+# 타입 체킹
+mypy==1.13.0
+types-python-dateutil==2.9.0.20241206
+
+# 테스트 (requirements.txt에 이미 포함된 것 외 추가)
+respx==0.21.1        # httpx mock
