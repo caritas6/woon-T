@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@sentry/nextjs": "^9.0.0",
     "@tanstack/react-query": "^5.100.11",
+    "@tosspayments/tosspayments-js": "^2.0.0",
     "axios": "^1.16.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.16.0",

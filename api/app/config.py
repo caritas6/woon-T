@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     SMTP_FROM: str = "운트(Woon-T) <noreply@woon-t.com>"
     SMTP_TLS: bool = True           # STARTTLS (포트 587). SSL(465)은 False로 변경
 
+    # ── 에러 모니터링 (Sentry) ──────────────────────────────────────────────
+    # 미설정 시 Sentry 비활성화 (개발 환경 기본)
+    SENTRY_DSN: str = ""
+    SENTRY_TRACES_SAMPLE_RATE: float = 0.1  # 10% 트랜잭션 샘플링
+
     @property
     def cors_origins(self) -> list[str]:
         return [o.strip() for o in self.ALLOWED_ORIGINS.split(",")]

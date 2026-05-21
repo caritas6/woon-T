@@ -1,7 +1,9 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from jose import JWTError
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import RegisterRequest, LoginRequest, TokenResponse, RefreshRequest, UserOut
@@ -12,10 +14,13 @@ from app.services.email_service import send_welcome
 
 router = APIRouter(prefix="/auth", tags=["인증"])
 settings = get_settings()
+limiter = Limiter(key_func=get_remote_address)
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")   # IP당 분당 5회 — 계정 생성 남용 방지
 async def register(
+    request: Request,
     body: RegisterRequest,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
@@ -48,7 +53,8 @@ async def register(
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
+@limiter.limit("10/minute")  # IP당 분당 10회 — 브루트포스 방지
+async def login(request: Request, body: LoginRequest, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).where(User.email == body.email))
     user = result.scalar_one_or_none()
     if not user or not verify_password(body.password, user.hashed_password):

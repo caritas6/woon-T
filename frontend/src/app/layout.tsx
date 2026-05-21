@@ -31,21 +31,14 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: SITE_URL,
     siteName: SITE_NAME,
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: `${SITE_NAME} — 사주 기반 AI 진로 상담`,
-      },
-    ],
+    // OG 이미지는 app/opengraph-image.tsx 파일 컨벤션이 자동 처리합니다
   },
 
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} — 사주 기반 AI 진로 상담`,
     description: DEFAULT_DESCRIPTION,
-    images: ["/og-image.png"],
+    // twitter 이미지도 opengraph-image.tsx 가 공유됩니다
   },
 
   robots: {

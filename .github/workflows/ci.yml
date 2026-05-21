@@ -101,6 +101,7 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: https://api.woon-t.com/api/v1
           NEXT_PUBLIC_TOSS_CLIENT_KEY: test_ck_placeholder_for_ci
+          NEXT_PUBLIC_SENTRY_DSN: ""   # CI에서는 Sentry 비활성
         run: npm run build
 
   # ── API 린트 (ruff) ──────────────────────────────────────────────────────

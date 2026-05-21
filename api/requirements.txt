@@ -42,6 +42,12 @@ stripe==11.3.0
 # Email
 aiosmtplib==3.0.2
 
+# Rate limiting
+slowapi==0.1.9
+
+# Error monitoring
+sentry-sdk[fastapi]==2.19.2
+
 # Env
 python-dotenv==1.0.1
 

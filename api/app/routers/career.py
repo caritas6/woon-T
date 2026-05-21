@@ -1,8 +1,10 @@
 import uuid
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from app.database import get_db
 from app.models.user import User
 from app.models.saju import SajuProfile, Report
@@ -11,6 +13,8 @@ from app.services.saju_engine import calculate_saju
 from app.services.ai_counselor import analyze_career, chat_followup, generate_daily_fortune
 from app.services.email_service import send_analysis_done
 from app.core.dependencies import get_current_user, require_pro
+
+limiter = Limiter(key_func=get_remote_address)
 from datetime import date
 
 router = APIRouter(prefix="/career", tags=["진로 분석"])
@@ -72,7 +76,9 @@ async def _run_analysis(
 
 
 @router.post("/analyze", response_model=CareerReportOut, status_code=202)
+@limiter.limit("3/minute")   # AI 비용 보호 — IP당 분당 3회
 async def analyze(
+    request: Request,
     body: CareerAnalyzeRequest,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
