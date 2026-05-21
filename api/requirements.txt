@@ -39,6 +39,9 @@ lunardate==0.2.0
 # Payments
 stripe==11.3.0
 
+# Email
+aiosmtplib==3.0.2
+
 # Env
 python-dotenv==1.0.1
 

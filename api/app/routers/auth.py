@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from jose import JWTError
@@ -8,13 +8,18 @@ from app.schemas.user import RegisterRequest, LoginRequest, TokenResponse, Refre
 from app.core.security import hash_password, verify_password, create_access_token, create_refresh_token, decode_token
 from app.core.dependencies import get_current_user
 from app.config import get_settings
+from app.services.email_service import send_welcome
 
 router = APIRouter(prefix="/auth", tags=["인증"])
 settings = get_settings()
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
-async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
+async def register(
+    body: RegisterRequest,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+):
     existing = await db.execute(select(User).where(User.email == body.email))
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="이미 사용 중인 이메일입니다")
@@ -27,6 +32,13 @@ async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
     db.add(user)
     await db.flush()
     await db.refresh(user)
+
+    # 환영 이메일 — 백그라운드(비블로킹)
+    background_tasks.add_task(
+        send_welcome,
+        to=user.email,
+        nickname=user.nickname or "",
+    )
 
     return TokenResponse(
         access_token=create_access_token(str(user.id)),

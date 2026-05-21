@@ -9,13 +9,21 @@ from app.models.saju import SajuProfile, Report
 from app.schemas.career import CareerAnalyzeRequest, CareerReportOut, ChatRequest, ChatResponse, DailyFortuneOut
 from app.services.saju_engine import calculate_saju
 from app.services.ai_counselor import analyze_career, chat_followup, generate_daily_fortune
+from app.services.email_service import send_analysis_done
 from app.core.dependencies import get_current_user, require_pro
 from datetime import date
 
 router = APIRouter(prefix="/career", tags=["진로 분석"])
 
 
-async def _run_analysis(report_id: uuid.UUID, saju_profile: SajuProfile, situation: str | None, db: AsyncSession):
+async def _run_analysis(
+    report_id: uuid.UUID,
+    saju_profile: SajuProfile,
+    situation: str | None,
+    db: AsyncSession,
+    user_email: str = "",
+    user_nickname: str = "",
+):
     """백그라운드 AI 분석 태스크"""
     result = await db.execute(select(Report).where(Report.id == report_id))
     report = result.scalar_one_or_none()
@@ -42,10 +50,24 @@ async def _run_analysis(report_id: uuid.UUID, saju_profile: SajuProfile, situati
             + analysis.get("_meta", {}).get("output_tokens", 0)
         )
         report.completed_at = datetime.now(timezone.utc)
+        await db.commit()
+
+        # 분석 완료 이메일 (비블로킹 — 실패해도 메인 플로우에 영향 없음)
+        if user_email:
+            try:
+                one_liner = analysis.get("one_liner", "사주 기반 진로 분석이 완료됐습니다.")
+                await send_analysis_done(
+                    to=user_email,
+                    nickname=user_nickname,
+                    report_id=str(report_id),
+                    one_liner=one_liner,
+                )
+            except Exception:
+                pass  # 이메일 실패는 무시
+
     except Exception as e:
         report.status = "failed"
         report.analysis_data = {"error": str(e)}
-    finally:
         await db.commit()
 
 
@@ -81,7 +103,15 @@ async def analyze(
     await db.flush()
     await db.refresh(report)
 
-    background_tasks.add_task(_run_analysis, report.id, profile, body.situation, db)
+    background_tasks.add_task(
+        _run_analysis,
+        report.id,
+        profile,
+        body.situation,
+        db,
+        user.email,
+        user.nickname or "",
+    )
 
     return CareerReportOut(
         report_id=str(report.id),

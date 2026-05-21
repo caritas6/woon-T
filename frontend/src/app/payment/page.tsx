@@ -3,9 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
-import { api } from "@/lib/api";
 
-// ── 요금제 정의 ────────────────────────────────────────────────────────────
+// ── 요금제 ────────────────────────────────────────────────────────────────
 
 const PLANS = [
   {
@@ -13,7 +12,7 @@ const PLANS = [
     tier: "pro",
     name: "Pro",
     price: 9900,
-    period: "monthly",
+    period: "monthly" as const,
     label: "월간",
     features: [
       "전체 커리어 매칭 리포트",
@@ -29,12 +28,12 @@ const PLANS = [
     tier: "pro",
     name: "Pro 연간",
     price: 7900,
-    period: "yearly",
+    period: "yearly" as const,
     label: "연간",
     features: [
       "Pro 월간 모든 기능",
       "연간 결제 시 월 ₩2,000 절약",
-      "연 ₩94,800 (₩23,400 절약)",
+      "연 ₩94,800 청구 (₩23,400 절약)",
     ],
     highlight: false,
   },
@@ -43,11 +42,11 @@ const PLANS = [
     tier: "premium",
     name: "Premium",
     price: 29900,
-    period: "monthly",
+    period: "monthly" as const,
     label: "프리미엄",
     features: [
       "Pro 모든 기능 포함",
-      "월 1회 전문가 30분 상담 포함",
+      "월 1회 전문가 30분 상담",
       "AI 채팅 무제한",
       "대운 흐름 5년 분석",
       "커리어 변화 시점 알림",
@@ -56,13 +55,41 @@ const PLANS = [
   },
 ];
 
-// Toss Payments 고객 키 (실제 환경에서는 서버에서 발급)
-const TOSS_CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ?? "test_ck_placeholder";
+type Plan = typeof PLANS[0];
+
+// ── Toss SDK 로더 ─────────────────────────────────────────────────────────
+
+const TOSS_CLIENT_KEY =
+  process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ?? "test_ck_placeholder";
+
+async function requestTossPayment(plan: Plan, user: { email: string; nickname: string | null }) {
+  // @tosspayments/tosspayments-js 동적 임포트 (Next.js 번들 최적화)
+  const { loadTossPayments } = await import("@tosspayments/tosspayments-js");
+  const toss = await loadTossPayments(TOSS_CLIENT_KEY);
+
+  const orderId   = `woont-${plan.id}-${Date.now()}`;
+  const amount    = plan.price * (plan.period === "yearly" ? 12 : 1);
+  const orderName = `운트(Woon-T) ${plan.name} 구독`;
+  const base      = window.location.origin;
+
+  await toss.requestPayment("카드", {
+    amount,
+    orderId,
+    orderName,
+    successUrl: `${base}/payment/success?planId=${plan.id}&orderId=${orderId}&amount=${amount}`,
+    failUrl:    `${base}/payment/fail?orderId=${orderId}`,
+    customerEmail: user.email,
+    customerName:  user.nickname ?? user.email.split("@")[0],
+  });
+  // requestPayment 는 결제창으로 리다이렉트하므로 여기서 반환되지 않음
+}
+
+// ── 컴포넌트 ─────────────────────────────────────────────────────────────
 
 export default function PaymentPage() {
   const router = useRouter();
   const { user } = useStore();
-  const [selected, setSelected] = useState(PLANS[0]);
+  const [selected, setSelected] = useState<Plan>(PLANS[0]);
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState<string | null>(null);
 
@@ -74,7 +101,7 @@ export default function PaymentPage() {
           <h1 className="font-serif text-2xl font-bold text-white mb-3">로그인이 필요합니다</h1>
           <p className="text-sm text-white/40 mb-6">업그레이드하려면 먼저 로그인해 주세요</p>
           <div className="flex gap-3 justify-center">
-            <Link href="/login" className="btn-primary">로그인</Link>
+            <Link href="/login"  className="btn-primary">로그인</Link>
             <Link href="/signup" className="btn-ghost">회원가입</Link>
           </div>
         </div>
@@ -98,30 +125,19 @@ export default function PaymentPage() {
   }
 
   async function handlePayment() {
+    if (!user) return;
     setLoading(true);
     setError(null);
-
-    const orderId   = `woont_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    const orderName = `운트(Woon-T) ${selected.name} 구독`;
-    const amount    = selected.price * (selected.period === "yearly" ? 12 : 1);
-
     try {
-      // Toss Payments SDK 동적 로드
-      // 실제 환경: @tosspayments/tosspayments-js 패키지 또는 script 태그로 로드
-      // MVP: 백엔드로 직접 요청하거나 Toss 위젯 URL로 리다이렉트
-      const successUrl = `${window.location.origin}/payment/success?planId=${selected.id}`;
-      const failUrl    = `${window.location.origin}/payment/fail`;
-
-      // Toss 결제창 열기 (실제 SDK 연동 시 아래 코드 사용)
-      // const toss = await loadTossPayments(TOSS_CLIENT_KEY);
-      // await toss.requestPayment("카드", { amount, orderId, orderName, successUrl, failUrl });
-
-      // MVP 시뮬레이션: 1초 후 성공 페이지로
-      await new Promise((r) => setTimeout(r, 1000));
-      router.push(`/payment/success?planId=${selected.id}&orderId=${orderId}&amount=${amount}&mock=true`);
+      await requestTossPayment(selected, user);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "결제 처리 중 오류가 발생했습니다.";
-      setError(msg);
+      // 사용자가 결제창을 닫으면 여기 도달
+      const msg = (err as { message?: string })?.message ?? "";
+      if (msg.includes("취소") || msg.includes("cancel")) {
+        setError(null); // 취소는 에러로 표시 안 함
+      } else {
+        setError(msg || "결제 처리 중 오류가 발생했습니다.");
+      }
       setLoading(false);
     }
   }
@@ -157,11 +173,10 @@ export default function PaymentPage() {
           </h1>
         </div>
 
+        {/* 플랜 카드 */}
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           {PLANS.map((plan) => (
-            <button
-              key={plan.id}
-              onClick={() => setSelected(plan)}
+            <button key={plan.id} onClick={() => setSelected(plan)}
               className={`text-left rounded-2xl p-4 border transition-all cursor-pointer
                 ${selected.id === plan.id
                   ? "border-gold/60 bg-gold/[0.08]"
@@ -200,6 +215,10 @@ export default function PaymentPage() {
               {selected.period === "yearly" ? "연간 (12개월)" : "월간"}
             </p>
           </div>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm text-white/70">결제 계정</p>
+            <p className="text-sm text-white/50">{user.email}</p>
+          </div>
           <div className="border-t border-white/10 pt-3 flex items-center justify-between">
             <p className="text-sm font-bold text-white">총 결제 금액</p>
             <p className="font-serif text-xl font-bold text-gold">
@@ -208,7 +227,7 @@ export default function PaymentPage() {
           </div>
           {selected.period === "yearly" && (
             <p className="text-[10px] text-white/30 text-right mt-1">
-              월 ₩{selected.price.toLocaleString()} × 12개월
+              월 ₩{selected.price.toLocaleString()} × 12개월 청구
             </p>
           )}
         </div>
@@ -219,14 +238,14 @@ export default function PaymentPage() {
           </div>
         )}
 
-        <button
-          onClick={handlePayment}
-          disabled={loading}
+        <button onClick={handlePayment} disabled={loading}
           className={`w-full py-4 rounded-full text-sm font-bold transition-all
             ${!loading
               ? "bg-gold text-ink hover:scale-[1.02] active:scale-95 cursor-pointer"
               : "bg-white/10 text-white/30 cursor-not-allowed"}`}>
-          {loading ? "결제창 연결 중…" : `토스페이로 ₩${totalAmount.toLocaleString()} 결제하기`}
+          {loading
+            ? "결제창 연결 중…"
+            : `토스페이로 ₩${totalAmount.toLocaleString()} 결제하기`}
         </button>
 
         <p className="text-center text-[11px] text-white/20 mt-4 leading-relaxed">

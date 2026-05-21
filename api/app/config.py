@@ -30,6 +30,15 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = ""
     SUPABASE_SERVICE_KEY: str = ""
 
+    # ── 이메일 (SMTP) ───────────────────────────────────────────────────────
+    # 미설정 시 이메일 발송을 건너뜁니다 (개발 환경 친화적)
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM: str = "운트(Woon-T) <noreply@woon-t.com>"
+    SMTP_TLS: bool = True           # STARTTLS (포트 587). SSL(465)은 False로 변경
+
     @property
     def cors_origins(self) -> list[str]:
         return [o.strip() for o in self.ALLOWED_ORIGINS.split(",")]

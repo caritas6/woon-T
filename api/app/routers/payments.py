@@ -2,7 +2,7 @@
 import hmac
 import hashlib
 import json
-from fastapi import APIRouter, Depends, HTTPException, Request, Header
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timezone, timedelta
@@ -10,6 +10,7 @@ from app.database import get_db
 from app.models.user import User, SubscriptionTier
 from app.core.dependencies import get_current_user
 from app.config import get_settings
+from app.services.email_service import send_payment_confirm
 
 router = APIRouter(prefix="/payments", tags=["결제"])
 settings = get_settings()
@@ -59,6 +60,7 @@ async def list_plans():
 @router.post("/toss/confirm")
 async def toss_confirm(
     body: dict,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -97,6 +99,16 @@ async def toss_confirm(
     user.subscription_tier = plan["tier"]
     user.subscription_expires_at = datetime.now(timezone.utc) + timedelta(days=plan["duration_days"])
     await db.commit()
+
+    # 결제 완료 이메일 (백그라운드)
+    background_tasks.add_task(
+        send_payment_confirm,
+        to=user.email,
+        nickname=user.nickname or "",
+        plan_name=plan["name"],
+        amount=body.get("amount", plan["price_krw"]),
+        order_id=body.get("orderId", ""),
+    )
 
     return {"status": "success", "tier": plan["tier"].value, "expires_at": user.subscription_expires_at.isoformat()}
 
