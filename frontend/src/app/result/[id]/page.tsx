@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
-import { careerApi, reportApi } from "@/lib/api";
+import { careerApi, reportApi, sajuApi } from "@/lib/api";
 import type { CareerReport, SajuResult, Pillar } from "@/types";
 
 // ── 상수 ──────────────────────────────────────────────────────────────────
@@ -364,32 +364,65 @@ function AIAnalysis({ reportId, profileId, isLoggedIn }: {
 // ── 메인 페이지 ────────────────────────────────────────────────────────────
 
 export default function ResultPage() {
-  const params     = useParams();
-  const router     = useRouter();
-  const id         = params?.id as string;
+  const params = useParams();
+  const router = useRouter();
+  const id     = params?.id as string;
 
-  const { sajuResult, user }  = useStore();
-  const { setActiveReport }    = useStore();
+  const { user, setSajuResult } = useStore();
+  const storeResult = useStore((s) => s.sajuResult);
 
-  // id가 저장된 결과와 다르면 분석 페이지로
+  const [pageResult, setPageResult] = useState<SajuResult | null>(storeResult ?? null);
+  const [fetching,   setFetching]   = useState(false);
+  const [fetchErr,   setFetchErr]   = useState<string | null>(null);
+
+  // 1) 저장된 결과가 id와 다르거나 없으면 API에서 조회 시도
   useEffect(() => {
-    if (sajuResult && sajuResult.profile_id !== id) {
-      router.replace(`/result/${sajuResult.profile_id}`);
-    }
-  }, [sajuResult, id, router]);
+    if (pageResult?.profile_id === id) return; // 이미 맞는 결과
 
-  if (!sajuResult) {
+    if (user) {
+      // 로그인 상태: 프로필 목록에서 해당 id 검색
+      setFetching(true);
+      sajuApi.profiles()
+        .then(({ data }) => {
+          const found = data.find((p) => p.profile_id === id);
+          if (found) { setPageResult(found); setSajuResult(found); }
+          else setFetchErr("해당 분석 결과를 찾을 수 없습니다.");
+        })
+        .catch(() => setFetchErr("결과를 불러오지 못했습니다."))
+        .finally(() => setFetching(false));
+    } else if (storeResult) {
+      // 비로그인 + store에 결과 있음: URL만 동기화
+      router.replace(`/result/${storeResult.profile_id}`);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, user]);
+
+  // 로딩
+  if (fetching) {
+    return (
+      <div className="min-h-screen bg-ink flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full border-2 border-gold/30 border-t-gold animate-spin" />
+      </div>
+    );
+  }
+
+  // 결과 없음
+  if (!pageResult || fetchErr) {
     return (
       <div className="min-h-screen bg-ink flex items-center justify-center px-6">
         <div className="text-center">
           <p className="text-4xl mb-4">🔮</p>
-          <h1 className="font-serif text-2xl font-bold text-white mb-3">분석 결과를 찾을 수 없습니다</h1>
+          <h1 className="font-serif text-2xl font-bold text-white mb-3">
+            {fetchErr ?? "분석 결과를 찾을 수 없습니다"}
+          </h1>
           <p className="text-sm text-white/40 mb-6">먼저 사주 분석을 진행해 주세요</p>
           <Link href="/analyze" className="btn-primary">무료 사주 분석 시작 →</Link>
         </div>
       </div>
     );
   }
+
+  const sajuResult = pageResult;
 
   const { persona, ilgan, ilgan_element, gyeokguk, yongsin,
           elements, career_matches, daeun_list, year, month, day, hour } = sajuResult;
