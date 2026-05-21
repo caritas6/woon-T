@@ -395,6 +395,15 @@ function StepResult({ result }: { result: SajuResult }) {
           </div>
         </div>
 
+        {/* 전체 결과 보기 */}
+        <Link href={`/result/${result.profile_id}`}
+          className="block bg-white/[0.05] border border-white/15 rounded-2xl p-4 text-center
+                     hover:border-gold/30 transition-colors">
+          <p className="text-xs text-white/60">
+            사주팔자 · 오행 · 대운 타임라인 전체 보기 →
+          </p>
+        </Link>
+
         {/* CTA */}
         <div className="bg-gold/[0.07] border border-gold/25 rounded-2xl p-5 text-center">
           <p className="font-serif text-base font-bold text-white mb-1">
