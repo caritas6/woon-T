@@ -1,0 +1,437 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:#FAF8F2;color:#1A1A2E;line-height:1.6}
+
+/* 버튼 hover만 CSS로 제어 */
+.b-white:hover{background:#C9A84C !important;border-color:#C9A84C !important;transform:translateY(-2px)}
+.b-ghost:hover{background:rgba(255,255,255,0.32) !important;border-color:#ffffff !important;transform:translateY(-2px)}
+.b-dark:hover{background:#2D2D4E !important;transform:translateY(-2px)}
+.b-free:hover{background:#2D2D4E !important;transform:translateY(-1px)}
+.b-biz:hover{background:#1A1A2E !important;color:#E8D5A3 !important;transform:translateY(-1px)}
+
+/* NAV */
+.nav{background:#1A1A2E;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;border-bottom:1px solid rgba(201,168,76,.25)}
+.brand{display:flex;align-items:center;gap:8px}
+.seal{width:32px;height:32px;border-radius:50%;background:#C9A84C;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:15px;color:#1A1A2E;font-weight:700}
+.brand-name{font-family:'Noto Serif KR',serif;font-size:19px;color:#fff;font-weight:700}
+.brand-sub{font-size:9px;color:rgba(201,168,76,.55);letter-spacing:1.8px;display:block;margin-top:-3px}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-link{font-size:11.5px;color:rgba(255,255,255,.6);cursor:pointer}
+
+/* HERO */
+.hero{background:#1A1A2E;padding:64px 24px 72px;text-align:center;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;opacity:.04;background-image:linear-gradient(rgba(201,168,76,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.5) 1px,transparent 1px);background-size:40px 40px}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.o1{width:360px;height:360px;background:rgba(201,168,76,.07);top:-90px;right:-70px}
+.o2{width:220px;height:220px;background:rgba(46,95,138,.09);bottom:-30px;left:-50px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);border-radius:20px;padding:7px 16px;font-size:11px;color:#E8D5A3;margin-bottom:26px;letter-spacing:.7px;position:relative;z-index:2}
+.pulse{width:6px;height:6px;border-radius:50%;background:#C9A84C;animation:pl 2s infinite}
+@keyframes pl{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.hero h1{font-family:'Noto Serif KR',serif;font-size:clamp(26px,5vw,44px);font-weight:700;color:#fff;line-height:1.28;margin-bottom:14px;position:relative;z-index:2;letter-spacing:-.5px}
+.gold-txt{color:#C9A84C}
+.under-txt{position:relative;display:inline-block}
+.under-txt::after{content:'';position:absolute;left:0;bottom:-3px;width:100%;height:2px;background:#C9A84C;border-radius:1px}
+.hero-desc{font-size:13.5px;color:rgba(255,255,255,.65);max-width:400px;margin:0 auto 34px;line-height:1.8;position:relative;z-index:2}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;position:relative;z-index:2}
+
+.stats{display:flex;justify-content:center;flex-wrap:wrap;margin-bottom:44px;position:relative;z-index:2}
+.stat{padding:0 24px;text-align:center;border-right:1px solid rgba(255,255,255,.12)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Noto Serif KR',serif;font-size:24px;color:#fff;font-weight:700;display:block;line-height:1}
+.stat-l{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px}
+
+/* PHONE */
+.phone{max-width:360px;margin:0 auto;position:relative;z-index:2;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.25);border-radius:22px;padding:18px}
+.notch{width:68px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto 14px}
+.sc-card{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:14px;margin-bottom:10px}
+.sc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sc-date{font-size:10px;color:rgba(255,255,255,.45)}
+.sc-ok{background:rgba(61,122,74,.25);border:1px solid rgba(61,122,74,.5);border-radius:10px;padding:2px 8px;font-size:9px;color:#8FD49A}
+.sc-num{font-family:'Noto Serif KR',serif;font-size:42px;color:#C9A84C;font-weight:700;line-height:1;margin-bottom:3px}
+.sc-lbl{font-size:10px;color:rgba(255,255,255,.45);margin-bottom:8px}
+.sc-bar{background:rgba(255,255,255,.1);border-radius:3px;height:5px}
+.sc-fill{height:5px;border-radius:3px;background:#C9A84C;width:76%}
+.jobs{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.job{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between}
+.job-l{display:flex;align-items:center;gap:8px}
+.elem{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:11px;font-weight:700}
+.job-t{font-size:11.5px;color:rgba(255,255,255,.8);font-weight:500}
+.job-p{font-size:11px;font-weight:700;color:#C9A84C}
+.tabs{display:flex;justify-content:space-around;margin-top:12px;border-top:1px solid rgba(255,255,255,.07);padding-top:10px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:rgba(255,255,255,.3)}
+.tab.on{color:#C9A84C}
+
+/* SECTIONS */
+.sec{padding:52px 24px}
+.sec-inner{max-width:600px;margin:0 auto}
+.kicker{display:inline-block;font-size:10px;letter-spacing:1.5px;font-weight:700;color:#8B6914;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:3px 12px;margin-bottom:12px}
+.sec h2{font-family:'Noto Serif KR',serif;font-size:clamp(20px,3.5vw,28px);font-weight:700;line-height:1.35;margin-bottom:6px}
+.sec h2 em{color:#C9A84C;font-style:normal}
+.gbar{width:34px;height:3px;background:#C9A84C;border-radius:2px;margin:12px 0 24px}
+
+/* SOCIAL PROOF */
+.sp-sec{background:#F0EDE0}
+.metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.metric{background:#fff;border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:14px 10px;text-align:center}
+.m-num{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:#1A1A2E;line-height:1;margin-bottom:3px}
+.m-lbl{font-size:10px;color:#7A7060;line-height:1.4}
+.rv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rv{background:#fff;border:1px solid rgba(201,168,76,.18);border-radius:12px;padding:14px}
+.rv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.rv-stars{color:#C9A84C;font-size:12px}
+.rv-tag{font-size:9px;background:#F0EDE0;border-radius:6px;padding:2px 8px;color:#7A7060}
+.rv-body{font-size:11px;color:#2D2D4E;line-height:1.65;margin-bottom:9px}
+.rv-author{display:flex;align-items:center;gap:7px}
+.rv-ava{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+.rv-name{font-size:10.5px;font-weight:600;color:#1A1A2E}
+.rv-role{font-size:9px;color:#7A7060}
+.rv-feat{grid-column:1/-1;background:#1A1A2E;border:1px solid rgba(201,168,76,.3);border-radius:14px;padding:18px;display:flex;gap:14px}
+.rv-q{font-size:30px;color:#C9A84C;font-family:'Noto Serif KR',serif;font-weight:700;line-height:1;flex-shrink:0;margin-top:-4px}
+.rv-fb{font-size:12px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:9px}
+.rv-fn{font-size:11px;font-weight:600;color:#fff}
+.rv-fr{font-size:9px;color:rgba(255,255,255,.4)}
+
+/* PRICING */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.plan{background:#fff;border:1px solid rgba(201,168,76,.2);border-radius:16px;padding:20px 16px;position:relative}
+.plan-pop{background:#1A1A2E;border:2px solid #C9A84C}
+.plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#C9A84C;color:#1A1A2E;border-radius:10px;padding:3px 14px;font-size:9px;font-weight:700;white-space:nowrap}
+.plan-tier{font-size:9px;letter-spacing:1.5px;font-weight:700;color:#7A7060;margin-bottom:6px}
+.plan-tier-pop{color:#E8D5A3}
+.plan-price{display:flex;align-items:baseline;gap:3px;margin-bottom:4px}
+.plan-num{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:700;color:#1A1A2E;line-height:1}
+.plan-num-pop{color:#fff}
+.plan-unit{font-size:10px;color:#7A7060}
+.plan-desc{font-size:10.5px;color:#7A7060;margin-bottom:14px;line-height:1.5}
+.plan-desc-pop{color:rgba(255,255,255,.45)}
+.plan-items{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.pi{display:flex;align-items:flex-start;gap:6px;font-size:10.5px;color:#1A1A2E}
+.pi-pop{color:rgba(255,255,255,.8)}
+.pi-off{color:#C0B9A8}
+.pid{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:1px}
+.pid-ok{background:rgba(61,122,74,.15);color:#3D7A4A}
+.pid-gld{background:rgba(201,168,76,.2);color:#8B6914}
+.pid-no{background:#F0EDE0;color:transparent}
+.pid-no-dk{background:rgba(255,255,255,.06);color:transparent}
+
+/* EXPERT */
+.exp-sec{background:#F0EDE0}
+.pkg-banner{background:#1A1A2E;border-radius:14px;padding:16px 18px;display:flex;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.pkg-badge{font-size:9px;color:#E8D5A3;letter-spacing:.5px;margin-bottom:3px}
+.pkg-title{font-family:'Noto Serif KR',serif;font-size:14px;color:#fff;font-weight:600;margin-bottom:3px}
+.pkg-desc{font-size:10px;color:rgba(255,255,255,.45)}
+.exp-list{display:flex;flex-direction:column;gap:10px}
+.exp{background:#fff;border:1.5px solid rgba(201,168,76,.2);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:flex-start}
+.exp-ava{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.exp-name{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:2px}
+.exp-role{font-size:10px;color:#8B6914;font-weight:600;margin-bottom:6px}
+.exp-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+.exp-tag{background:#F0EDE0;border-radius:6px;padding:2px 8px;font-size:9px;color:#7A7060}
+.exp-bio{font-size:11px;color:#7A7060;line-height:1.6;margin-bottom:10px}
+.exp-foot{display:flex;align-items:center;justify-content:space-between}
+.exp-price{font-size:13px;font-weight:700;color:#1A1A2E}
+.exp-price span{font-size:10px;font-weight:400;color:#7A7060}
+.exp-rating{font-size:10px;color:#7A7060}
+
+/* CTA */
+.cta-sec{background:#1A1A2E;text-align:center;padding:68px 24px}
+.cta-kicker{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:4px 14px;font-size:10px;color:#E8D5A3;letter-spacing:1px;margin-bottom:18px}
+.cta-sec h2{font-family:'Noto Serif KR',serif;font-size:clamp(22px,4vw,32px);color:#fff;font-weight:700;line-height:1.3;margin-bottom:10px}
+.cta-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:30px;line-height:1.7}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-note{font-size:10px;color:rgba(255,255,255,.3);margin-top:14px}
+.trust-row{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,.35)}
+.trust-dot{width:4px;height:4px;border-radius:50%;background:#C9A84C}
+
+footer{background:#0D0D1C;padding:28px 24px;text-align:center}
+.footer-logo{font-family:'Noto Serif KR',serif;font-size:15px;color:rgba(255,255,255,.4);margin-bottom:6px}
+.footer-copy{font-size:9px;color:rgba(255,255,255,.18)}
+
+/* 공통 전환 */
+button{transition:background .18s,color .18s,border-color .18s,transform .14s,box-shadow .18s;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+button:active{transform:scale(.97)!important}
+</style>
+
+<h2 class="sr-only">운트 랜딩 페이지 — 버튼 인라인 스타일 직접 적용</h2>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="brand">
+    <div class="seal">運</div>
+    <div>
+      <span class="brand-name">운트</span>
+      <span class="brand-sub">WOON-T · MY LUCK &amp; TALENT</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <span class="nav-link">서비스</span>
+    <span class="nav-link">기능</span>
+    <span class="nav-link">요금제</span>
+    <span class="nav-link">상담소</span>
+    <span class="nav-link">후기</span>
+
+    <!-- ① 무료 시작 — 흰 배경 인라인 직접 -->
+    <button class="b-white"
+      style="background:#FFFFFF;color:#1A1A2E;border:2px solid #FFFFFF;border-radius:20px;padding:8px 18px;font-size:11px;font-weight:700;letter-spacing:.5px;display:inline-flex;align-items:center"
+      onclick="sendPrompt('운트 무료 시작')">무료 시작 →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+
+  <div class="eyebrow">
+    <span class="pulse"></span>사주 명리학 × 현대 커리어 AI · 2026 신규 오픈
+  </div>
+
+  <h1>타고난 <span class="gold-txt">기운(氣運)</span>으로<br>찾는 <span class="under-txt">최적의 커리어</span></h1>
+
+  <p class="hero-desc">
+    생년월일시 하나로 사주 원국·오행·격국을 분석하고<br>
+    나에게 맞는 직무 Top 3와 90일 실천 로드맵을 제공합니다.<br>
+    무속이 아닌, 데이터 기반 커리어 가이드.
+  </p>
+
+  <div class="hero-btns">
+
+    <!-- ② 무료로 사주 분석하기 — 흰 배경 인라인 직접 -->
+    <button class="b-white"
+      style="background:#FFFFFF;color:#1A1A2E;border:2.5px solid #FFFFFF;border-radius:28px;padding:15px 32px;font-size:14px;font-weight:700;font-family:'Noto Serif KR',serif;letter-spacing:.4px;display:inline-flex;align-items:center;gap:6px"
+      onclick="sendPrompt('운트 무료 사주 분석 시작하기')">✦ 무료로 사주 분석하기</button>
+
+    <!-- ③ 샘플 리포트 보기 — 반투명 흰 배경 인라인 직접 -->
+    <button class="b-ghost"
+      style="background:rgba(255,255,255,0.20);color:#FFFFFF;border:2px solid rgba(255,255,255,0.85);border-radius:28px;padding:14px 26px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px"
+      onclick="sendPrompt('운트 샘플 리포트 보기')">샘플 리포트 보기 →</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat-n">32,000+</span><div class="stat-l">누적 분석 수</div></div>
+    <div class="stat"><span class="stat-n">4.9<span style="font-size:15px;color:#C9A84C">★</span></span><div class="stat-l">평균 만족도</div></div>
+    <div class="stat"><span class="stat-n">3<span style="font-size:14px;color:rgba(255,255,255,.5)">분</span></span><div class="stat-l">분석 소요 시간</div></div>
+    <div class="stat"><span class="stat-n">89<span style="font-size:14px;color:rgba(255,255,255,.5)">%</span></span><div class="stat-l">진로 만족 향상</div></div>
+  </div>
+
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="sc-card">
+      <div class="sc-top"><span class="sc-date">2026.05.20 · 丙午日</span><span class="sc-ok">오늘 면접 길일</span></div>
+      <div class="sc-num">76</div>
+      <div class="sc-lbl">오늘의 행운 지수 / 100</div>
+      <div class="sc-bar"><div class="sc-fill"></div></div>
+    </div>
+    <div class="jobs">
+      <div class="job"><div class="job-l"><div class="elem" style="background:rgba(201,75,61,.18);color:#E06050">火</div><span class="job-t">크리에이티브 디렉터</span></div><span class="job-p">98%</span></div>
+      <div class="job"><div class="job-l"><div class="elem" style="background:rgba(61,122,74,.18);color:#6DB87A">木</div><span class="job-t">브랜드 기획자</span></div><span class="job-p">91%</span></div>
+      <div class="job"><div class="job-l"><div class="elem" style="background:rgba(46,95,138,.18);color:#6A9EC5">水</div><span class="job-t">글로벌 마케터</span></div><span class="job-p">84%</span></div>
+    </div>
+    <div class="tabs">
+      <div class="tab on">🏠<span>홈</span></div>
+      <div class="tab">☯<span>사주</span></div>
+      <div class="tab">📅<span>캘린더</span></div>
+      <div class="tab">👥<span>상담소</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<div class="sec sp-sec">
+  <div class="sec-inner">
+    <div class="kicker">USER TRUST</div>
+    <h2>32,000명이 이미 선택했습니다</h2>
+    <div class="gbar"></div>
+    <div class="metric-row">
+      <div class="metric"><div class="m-num">32,000<span style="font-size:13px;color:#8B6914">+</span></div><div class="m-lbl">누적 분석</div></div>
+      <div class="metric"><div class="m-num">4.9<span style="font-size:13px;color:#C9A84C">★</span></div><div class="m-lbl">앱스토어 별점</div></div>
+      <div class="metric"><div class="m-num">89<span style="font-size:13px">%</span></div><div class="m-lbl">만족도 향상</div></div>
+      <div class="metric"><div class="m-num">3<span style="font-size:13px">분</span></div><div class="m-lbl">평균 소요</div></div>
+    </div>
+    <div class="rv-grid">
+      <div class="rv rv-feat">
+        <div class="rv-q">"</div>
+        <div><div class="rv-fb">MBTI보다 훨씬 구체적이고 직무까지 연결해줘서 놀랐습니다. 리포트 보고 UX 직군으로 방향 잡았고 3개월 뒤 취업 성공했어요.</div>
+        <div class="rv-fn">김O연 님 · 26세</div><div class="rv-fr">취업 준비생 → 네이버 UX 디자이너</div></div>
+      </div>
+      <div class="rv">
+        <div class="rv-top"><span class="rv-stars">★★★★★</span><span class="rv-tag">이직 성공</span></div>
+        <div class="rv-body">운세 캘린더에서 추천한 날 서류를 냈더니 합격했어요. 너무 정확합니다.</div>
+        <div class="rv-author"><div class="rv-ava" style="background:rgba(201,75,61,.1)">🔥</div><div><div class="rv-name">이O준 님</div><div class="rv-role">3년차 마케터 → CMO</div></div></div>
+      </div>
+      <div class="rv">
+        <div class="rv-top"><span class="rv-stars">★★★★★</span><span class="rv-tag">창업 결정</span></div>
+        <div class="rv-body">대운 분석에서 2026~2027이 상승기라는 걸 보고 창업을 결심했어요.</div>
+        <div class="rv-author"><div class="rv-ava" style="background:rgba(46,95,138,.1)">🌊</div><div><div class="rv-name">박O진 님</div><div class="rv-role">前 대기업 → 스타트업 창업</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="sec" style="background:#fff">
+  <div class="sec-inner">
+    <div class="kicker">PRICING</div>
+    <h2>합리적인 가격, <em>확실한 가치</em></h2>
+    <div class="gbar"></div>
+    <div class="plan-grid">
+
+      <div class="plan">
+        <div class="plan-tier">FREE</div>
+        <div class="plan-price"><span class="plan-num">0</span><span class="plan-unit">원</span></div>
+        <div class="plan-desc">기본 분석을 무료로 경험</div>
+        <div class="plan-items">
+          <div class="pi"><div class="pid pid-ok">✓</div>사주 원국 분석</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>오행 분포 확인</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>직무 Top 3 매칭</div>
+          <div class="pi pi-off"><div class="pid pid-no">✗</div>PDF 상세 리포트</div>
+          <div class="pi pi-off"><div class="pid pid-no">✗</div>운세 캘린더</div>
+          <div class="pi pi-off"><div class="pid pid-no">✗</div>전문가 상담 할인</div>
+        </div>
+        <!-- 밝은 배경 → 잉크 배경 + 흰 글자 -->
+        <button class="b-free"
+          style="background:#1A1A2E;color:#FFFFFF;border:2px solid #1A1A2E;border-radius:10px;padding:12px;font-size:12px;font-weight:700;width:100%;display:block"
+          onclick="sendPrompt('운트 무료로 시작하기')">무료로 시작하기</button>
+      </div>
+
+      <div class="plan plan-pop">
+        <div class="plan-badge">🌟 가장 인기</div>
+        <div class="plan-tier plan-tier-pop">PRO</div>
+        <div class="plan-price"><span class="plan-num plan-num-pop">9,900</span><span class="plan-unit" style="color:rgba(255,255,255,.4)">원/월</span></div>
+        <div class="plan-desc plan-desc-pop">진지하게 커리어를 바꾸고 싶은 분</div>
+        <div class="plan-items">
+          <div class="pi pi-pop"><div class="pid pid-gld">✓</div>사주 원국 분석</div>
+          <div class="pi pi-pop"><div class="pid pid-gld">✓</div>오행 분포 확인</div>
+          <div class="pi pi-pop"><div class="pid pid-gld">✓</div>직무 Top 3 매칭</div>
+          <div class="pi pi-pop"><div class="pid pid-gld">✓</div>PDF 상세 리포트</div>
+          <div class="pi pi-pop"><div class="pid pid-gld">✓</div>운세 캘린더 + 알림</div>
+          <div class="pi pi-pop"><div class="pid pid-gld">✓</div>전문가 상담 20% 할인</div>
+        </div>
+        <!-- ④ PRO 시작하기 — 다크 카드 안, 흰 배경 인라인 직접 -->
+        <button class="b-white"
+          style="background:#FFFFFF;color:#1A1A2E;border:2.5px solid #FFFFFF;border-radius:10px;padding:12px;font-size:12px;font-weight:700;font-family:'Noto Serif KR',serif;width:100%;display:block"
+          onclick="sendPrompt('운트 PRO 구독 시작')">PRO 시작하기 →</button>
+      </div>
+
+      <div class="plan">
+        <div class="plan-tier">BUSINESS</div>
+        <div class="plan-price"><span class="plan-num" style="font-size:20px">문의</span></div>
+        <div class="plan-desc">기업·대학·HR팀용 단체 솔루션</div>
+        <div class="plan-items">
+          <div class="pi"><div class="pid pid-ok">✓</div>PRO 전 기능 포함</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>팀원 무제한 분석</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>전용 대시보드</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>API 연동 지원</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>전담 CS 매니저</div>
+          <div class="pi"><div class="pid pid-ok">✓</div>화이트라벨 옵션</div>
+        </div>
+        <button class="b-biz"
+          style="background:#FFFFFF;color:#1A1A2E;border:1.5px solid #B0A898;border-radius:10px;padding:12px;font-size:12px;font-weight:700;width:100%;display:block"
+          onclick="sendPrompt('운트 비즈니스 플랜 문의')">도입 문의 →</button>
+      </div>
+
+    </div>
+    <p style="text-align:center;font-size:10px;color:#7A7060;margin-top:12px">언제든 구독 취소 가능 · 7일 이내 전액 환불</p>
+  </div>
+</div>
+
+<!-- EXPERT -->
+<div class="sec exp-sec">
+  <div class="sec-inner">
+    <div class="kicker">EXPERT CONNECT</div>
+    <h2>명리학자 + 커리어 코치 <em>1:1 상담</em></h2>
+    <div class="gbar"></div>
+
+    <div class="pkg-banner">
+      <div style="font-size:28px;flex-shrink:0">🎯</div>
+      <div style="flex:1">
+        <div class="pkg-badge">RECOMMENDED PACKAGE</div>
+        <div class="pkg-title">명리 + 커리어 통합 패키지</div>
+        <div class="pkg-desc">명리학자 분석(40분) + 커리어 코치 전략 상담(40분) · 분리 예약 대비 30% 할인</div>
+      </div>
+      <!-- ⑤ 패키지 예약 — 흰 배경 인라인 직접 -->
+      <button class="b-white"
+        style="background:#FFFFFF;color:#1A1A2E;border:2px solid #FFFFFF;border-radius:20px;padding:10px 20px;font-size:12px;font-weight:700;flex-shrink:0;display:inline-flex;align-items:center"
+        onclick="sendPrompt('운트 통합 패키지 예약하기')">패키지 예약</button>
+    </div>
+
+    <div class="exp-list">
+      <div class="exp">
+        <div class="exp-ava" style="background:rgba(201,168,76,.12)">🔮</div>
+        <div style="flex:1">
+          <div class="exp-name">김명철 명리학자</div>
+          <div class="exp-role">대한명리학회 정회원 · 15년 경력</div>
+          <div class="exp-tags"><span class="exp-tag">진로 특화</span><span class="exp-tag">사주 분석</span><span class="exp-tag">대운 해석</span></div>
+          <div class="exp-bio">15년간 3,000여 건 진로 상담. 취업준비생과 이직 고민자에 특화.</div>
+          <div class="exp-foot">
+            <div><div class="exp-price">55,000원 <span>/ 60분</span></div><div class="exp-rating">⭐ 4.9 · 238개</div></div>
+            <button class="b-dark"
+              style="background:#1A1A2E;color:#C9A84C;border:2px solid #C9A84C;border-radius:10px;padding:10px 20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center"
+              onclick="sendPrompt('김명철 명리학자 예약')">예약하기</button>
+          </div>
+        </div>
+      </div>
+      <div class="exp">
+        <div class="exp-ava" style="background:rgba(46,95,138,.12)">💼</div>
+        <div style="flex:1">
+          <div class="exp-name">박지연 커리어 코치</div>
+          <div class="exp-role">前 삼성 HR팀 10년 · 커리어 전환 전문</div>
+          <div class="exp-tags"><span class="exp-tag">이직 전략</span><span class="exp-tag">취업 코칭</span><span class="exp-tag">스타트업</span></div>
+          <div class="exp-bio">1,500명 이상의 커리어 전환. JD 분석부터 면접 전략까지.</div>
+          <div class="exp-foot">
+            <div><div class="exp-price">65,000원 <span>/ 60분</span></div><div class="exp-rating">⭐ 4.8 · 185개</div></div>
+            <button class="b-dark"
+              style="background:#1A1A2E;color:#C9A84C;border:2px solid #C9A84C;border-radius:10px;padding:10px 20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center"
+              onclick="sendPrompt('박지연 코치 예약')">예약하기</button>
+          </div>
+        </div>
+      </div>
+      <div class="exp">
+        <div class="exp-ava" style="background:rgba(61,122,74,.12)">🌏</div>
+        <div style="flex:1">
+          <div class="exp-name">이수현 글로벌 멘토</div>
+          <div class="exp-role">실리콘밸리 출신 · 해외 취업 특화</div>
+          <div class="exp-tags"><span class="exp-tag">역마살 특화</span><span class="exp-tag">해외 취업</span><span class="exp-tag">영문 이력서</span></div>
+          <div class="exp-bio">Google·Meta 등 실리콘밸리 7년. 영어 면접 패키지 포함.</div>
+          <div class="exp-foot">
+            <div><div class="exp-price">85,000원 <span>/ 60분</span></div><div class="exp-rating">⭐ 5.0 · 92개</div></div>
+            <button class="b-dark"
+              style="background:#1A1A2E;color:#C9A84C;border:2px solid #C9A84C;border-radius:10px;padding:10px 20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center"
+              onclick="sendPrompt('이수현 멘토 예약')">예약하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="cta-sec">
+  <div class="cta-kicker">START NOW · FREE</div>
+  <h2>지금 바로 나의 <em style="color:#C9A84C;font-style:normal">기운</em>을<br>확인해보세요</h2>
+  <p class="cta-sub">생년월일시 하나로 사주 분석 → 직무 매칭 → PDF 리포트까지.<br>무료로 시작하고, 진짜 내 커리어를 찾아보세요.</p>
+  <div class="cta-btns">
+    <button class="b-white"
+      style="background:#FFFFFF;color:#1A1A2E;border:2.5px solid #FFFFFF;border-radius:30px;padding:16px 38px;font-size:15px;font-weight:700;font-family:'Noto Serif KR',serif;letter-spacing:.5px;display:inline-flex;align-items:center;gap:6px"
+      onclick="sendPrompt('운트 무료 사주 분석 지금 시작하기')">✦ 무료 사주 분석 시작하기</button>
+    <button class="b-ghost"
+      style="background:rgba(255,255,255,0.18);color:#FFFFFF;border:2px solid rgba(255,255,255,0.8);border-radius:30px;padding:15px 28px;font-size:14px;font-weight:600;display:inline-flex;align-items:center"
+      onclick="sendPrompt('운트 PRO 요금제 알아보기')">PRO 알아보기 →</button>
+  </div>
+  <div class="cta-note">신용카드 불필요 · 회원가입 없이 시작 · 7일 전액 환불 보장</div>
+  <div class="trust-row">
+    <div class="trust-item"><span class="trust-dot"></span>32,000+ 분석 완료</div>
+    <div class="trust-item"><span class="trust-dot"></span>4.9★ 만족도</div>
+    <div class="trust-item"><span class="trust-dot"></span>3분 소요</div>
+    <div class="trust-item"><span class="trust-dot"></span>데이터 기반</div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">運 운트 Woon-T</div>
+  <div class="footer-copy">© 2026 Woon-T. All rights reserved.</div>
+</footer>

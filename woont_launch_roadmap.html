@@ -1,0 +1,165 @@
+
+<h2 class="sr-only">운트(Woon-T) 웹 앱 출시 로드맵 — 단계별 실행 계획</h2>
+
+<style>
+.rm-wrap{padding:1.5rem 0;max-width:640px;margin:0 auto}
+.phase-label{font-size:11px;font-weight:500;letter-spacing:1.5px;color:var(--color-text-secondary);margin-bottom:12px;text-transform:uppercase}
+.phase-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.ph1::before{background:#534AB7}
+.ph2::before{background:#0F6E56}
+.ph3::before{background:#BA7517}
+.ph4::before{background:#185FA5}
+.ph5::before{background:#993556}
+.phase-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ph-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.ph1 .ph-num{background:#EEEDFE;color:#3C3489}
+.ph2 .ph-num{background:#E1F5EE;color:#085041}
+.ph3 .ph-num{background:#FAEEDA;color:#633806}
+.ph4 .ph-num{background:#E6F1FB;color:#0C447C}
+.ph5 .ph-num{background:#FBEAF0;color:#72243E}
+.ph-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.ph-period{font-size:12px;color:var(--color-text-secondary);margin-left:auto;flex-shrink:0}
+.ph-badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.ph1 .ph-badge{background:#EEEDFE;color:#3C3489}
+.ph2 .ph-badge{background:#E1F5EE;color:#085041}
+.ph3 .ph-badge{background:#FAEEDA;color:#633806}
+.ph4 .ph-badge{background:#E6F1FB;color:#0C447C}
+.ph5 .ph-badge{background:#FBEAF0;color:#72243E}
+.task-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.task{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--color-text-primary);line-height:1.55}
+.task-dot{width:5px;height:5px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.ph1 .task-dot{background:#534AB7}
+.ph2 .task-dot{background:#0F6E56}
+.ph3 .task-dot{background:#BA7517}
+.ph4 .task-dot{background:#185FA5}
+.ph5 .task-dot{background:#993556}
+.sub{font-size:12px;color:var(--color-text-secondary);margin-left:13px;line-height:1.55}
+.ph-footer{display:flex;align-items:center;gap:8px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary);flex-wrap:wrap;gap:6px}
+.output-tag{font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+.divider-row{display:flex;align-items:center;gap:10px;margin:6px 0}
+.divider-line{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+.divider-txt{font-size:11px;color:var(--color-text-secondary);white-space:nowrap}
+.cta-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:4px}
+.cta-txt{font-size:13px;color:var(--color-text-secondary)}
+.cta-btn{font-size:13px;font-weight:500;color:var(--color-text-primary);background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 14px;cursor:pointer;white-space:nowrap}
+.cta-btn:hover{background:var(--color-background-secondary)}
+</style>
+
+<div class="rm-wrap">
+
+  <!-- PHASE 1 -->
+  <div class="phase-label">기술 완성</div>
+  <div class="phase-card ph1">
+    <div class="phase-head">
+      <div class="ph-num">1</div>
+      <span class="ph-title">코드베이스 정리 &amp; 백엔드 구축</span>
+      <span class="ph-period">2–3주</span>
+    </div>
+    <div class="task-list">
+      <div class="task"><div class="task-dot"></div><div><div>만세력 엔진 Python 모듈화</div><div class="sub">월주·격국·용신·대운수 알고리즘 단일 패키지로 분리, 단위 테스트 작성</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>API 서버 구축 (FastAPI / Node.js)</div><div class="sub">사주 분석 REST API — POST /analyze, GET /report/{id}, PDF 생성 엔드포인트</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>Claude AI 프롬프트 파이프라인 연결</div><div class="sub">Anthropic API 연동, 사주 데이터 → AI 진로 분석 → 구조화된 JSON 응답</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>데이터베이스 설계</div><div class="sub">사용자·분석결과·리포트 스키마, PostgreSQL / Supabase</div></div></div>
+    </div>
+    <div class="ph-footer">
+      <span class="output-tag">✓ 분석 API 완성</span>
+      <span class="output-tag">✓ PDF 자동 생성</span>
+      <span class="output-tag">✓ 테스트 커버리지 80%+</span>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-card ph2">
+    <div class="phase-head">
+      <div class="ph-num">2</div>
+      <span class="ph-title">프론트엔드 &amp; UX 완성</span>
+      <span class="ph-period">3–4주</span>
+    </div>
+    <div class="task-list">
+      <div class="task"><div class="task-dot"></div><div><div>React / Next.js 프로젝트 초기화</div><div class="sub">현재 위젯 코드 → 실제 웹앱으로 이식, 라우팅 구조 설계</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>3-스텝 온보딩 플로우 구현</div><div class="sub">정보 입력 → 로딩 → 결과 화면, 모바일 퍼스트 반응형</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>결과 페이지 완성</div><div class="sub">사주 원국·오행차트·대운표·직무매칭 카드, PDF 다운로드 버튼</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>랜딩 페이지 &amp; 마케팅 섹션</div><div class="sub">히어로·소셜프루프·요금제·FAQ·상담소 전체 연결</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>결제 연동 (Stripe / 토스페이먼츠)</div><div class="sub">PRO 구독, 인앱 결제, 웹훅 처리</div></div></div>
+    </div>
+    <div class="ph-footer">
+      <span class="output-tag">✓ 반응형 웹앱</span>
+      <span class="output-tag">✓ 결제 플로우</span>
+      <span class="output-tag">✓ 다운로드 PDF</span>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-card ph3">
+    <div class="phase-head">
+      <div class="ph-num">3</div>
+      <span class="ph-title">인프라 &amp; 보안 세팅</span>
+      <span class="ph-period">1–2주</span>
+    </div>
+    <div class="task-list">
+      <div class="task"><div class="task-dot"></div><div><div>클라우드 배포 환경 구성</div><div class="sub">Vercel(프론트) + Railway / AWS(백엔드), 도메인 연결, SSL</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>개인정보 처리방침 &amp; 이용약관 작성</div><div class="sub">개인정보보호법 준수, 생년월일 데이터 보관 기간·삭제 정책</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>보안 강화</div><div class="sub">API 인증(JWT), HTTPS 전용, 입력값 검증, Rate limiting</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>모니터링 &amp; 알림</div><div class="sub">Sentry 에러 트래킹, 서버 다운 알림, 응답속도 모니터링</div></div></div>
+    </div>
+    <div class="ph-footer">
+      <span class="output-tag">✓ 프로덕션 배포</span>
+      <span class="output-tag">✓ 법적 문서</span>
+      <span class="output-tag">✓ 보안 검토</span>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-card ph4">
+    <div class="phase-head">
+      <div class="ph-num">4</div>
+      <span class="ph-title">베타 테스트 &amp; 검증</span>
+      <span class="ph-period">2–3주</span>
+    </div>
+    <div class="task-list">
+      <div class="task"><div class="task-dot"></div><div><div>클로즈드 베타 (50–100명)</div><div class="sub">지인·커뮤니티 모집, 다양한 생년월일 데이터로 알고리즘 정확도 검증</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>명리학 전문가 크로스체크</div><div class="sub">격국·용신·대운 출력값 전문가 검토, 오류 케이스 수정</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>사용자 피드백 수집 &amp; UX 개선</div><div class="sub">Hotjar 히트맵, 설문, 인터뷰 — 이탈 포인트 파악 후 개선</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>성능 최적화</div><div class="sub">PDF 생성 속도, API 응답시간, 이미지 최적화</div></div></div>
+    </div>
+    <div class="ph-footer">
+      <span class="output-tag">✓ 알고리즘 검증</span>
+      <span class="output-tag">✓ UX 개선안</span>
+      <span class="output-tag">✓ 버그 픽스</span>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-card ph5">
+    <div class="phase-head">
+      <div class="ph-num">5</div>
+      <span class="ph-title">출시 &amp; 마케팅</span>
+      <span class="ph-period">정식 런칭</span>
+    </div>
+    <div class="task-list">
+      <div class="task"><div class="task-dot"></div><div><div>소프트 런칭 (Product Hunt / 커뮤니티)</div><div class="sub">블라인드·에브리타임·취준 커뮤니티, SNS 바이럴 테스트 콘텐츠 배포</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>SNS 바이럴 캠페인</div><div class="sub">"나의 전생 직업 테스트" 오행 자가진단 카드 공유 기능, 인스타·틱톡</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>전문가 상담소 오픈</div><div class="sub">명리학자·커리어 코치 온보딩, 예약 시스템 연동, 패키지 상품 판매</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>B2B 파트너십 협의</div><div class="sub">사람인·잡코리아 API 연동, 대학 취업센터 협약, HR 솔루션 내장 제안</div></div></div>
+      <div class="task"><div class="task-dot"></div><div><div>지표 모니터링 &amp; 그로스</div><div class="sub">DAU·전환율·리텐션 추적, A/B 테스트, 유료 전환 퍼널 최적화</div></div></div>
+    </div>
+    <div class="ph-footer">
+      <span class="output-tag">✓ 정식 서비스 런칭</span>
+      <span class="output-tag">✓ 유료 구독 시작</span>
+      <span class="output-tag">✓ B2B 파이프라인</span>
+    </div>
+  </div>
+
+  <div class="divider-row"><div class="divider-line"></div><div class="divider-txt">총 예상 소요기간 10–13주</div><div class="divider-line"></div></div>
+
+  <div class="cta-card">
+    <div class="cta-txt">어떤 단계부터 구체적으로 시작할까요?</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="cta-btn" onclick="sendPrompt('운트 API 서버 설계해줘')">API 설계 →</button>
+      <button class="cta-btn" onclick="sendPrompt('운트 Next.js 프로젝트 구조 잡아줘')">프론트 구조 →</button>
+      <button class="cta-btn" onclick="sendPrompt('운트 개인정보처리방침 작성해줘')">법적 문서 →</button>
+    </div>
+  </div>
+
+</div>

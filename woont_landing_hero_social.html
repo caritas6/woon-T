@@ -1,0 +1,359 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1A1A2E;--ink2:#2D2D4E;--paper:#FAF8F2;--paper2:#F0EDE0;
+  --gold:#C9A84C;--gold-lt:#E8D5A3;--gold-dk:#8B6914;--muted:#8A8070;
+  --fire:#C94B3D;--water:#2E5F8A;--wood:#3D7A4A;--metal:#7A8090;--earth:#8B6914;
+  --white:#fff;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+
+/* NAV */
+.nav{background:var(--ink);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px;border-bottom:1px solid rgba(201,168,76,.2);position:sticky;top:0;z-index:99}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.brand-seal{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:16px;color:var(--ink);font-weight:700}
+.brand-name{font-family:'Noto Serif KR',serif;font-size:20px;color:#fff;font-weight:700}
+.brand-en{font-size:9px;color:rgba(201,168,76,.6);letter-spacing:2px;display:block;margin-top:-3px}
+.nav-menu{display:flex;align-items:center;gap:22px}
+.nav-item{font-size:11.5px;color:rgba(255,255,255,.5);cursor:pointer;letter-spacing:.3px;transition:color .2s;text-decoration:none}
+.nav-item:hover{color:var(--gold)}
+.nav-start{background:var(--gold);color:var(--ink);border:none;border-radius:22px;padding:8px 18px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;letter-spacing:.5px}
+
+/* ─── HERO ─── */
+.hero{background:var(--ink);padding:72px 28px 80px;text-align:center;position:relative;overflow:hidden}
+.hero-bg-grid{position:absolute;inset:0;opacity:.04;background-image:linear-gradient(rgba(201,168,76,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.6) 1px,transparent 1px);background-size:40px 40px}
+.hero-circle{position:absolute;border-radius:50%;pointer-events:none}
+.hc1{width:380px;height:380px;background:rgba(201,168,76,.06);top:-100px;right:-80px}
+.hc2{width:240px;height:240px;background:rgba(46,95,138,.08);bottom:-40px;left:-60px}
+.hc3{width:120px;height:120px;background:rgba(201,168,76,.08);top:40%;left:8%}
+
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:7px 16px;font-size:11px;color:var(--gold-lt);margin-bottom:28px;letter-spacing:.8px;position:relative;z-index:2}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+.hero-h1{font-family:'Noto Serif KR',serif;font-size:clamp(28px,5.5vw,46px);font-weight:700;color:#fff;line-height:1.25;margin-bottom:14px;position:relative;z-index:2;letter-spacing:-.5px}
+.hero-h1 .gold{color:var(--gold)}
+.hero-h1 .under{position:relative;display:inline-block}
+.hero-h1 .under::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:2px;background:var(--gold);border-radius:1px}
+.hero-desc{font-size:14px;color:rgba(255,255,255,.48);max-width:420px;margin:0 auto 36px;line-height:1.75;position:relative;z-index:2}
+
+/* CTA PAIR */
+.cta-pair{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;position:relative;z-index:2}
+.btn-main{background:var(--gold);color:var(--ink);border:none;border-radius:28px;padding:15px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:.5px;transition:transform .15s,opacity .15s}
+.btn-main:hover{transform:scale(1.03)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.2);border-radius:28px;padding:14px 26px;font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* HERO STATS */
+.hero-stats{display:flex;gap:0;justify-content:center;margin-bottom:48px;position:relative;z-index:2;flex-wrap:wrap}
+.h-stat{padding:0 28px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.h-stat:last-child{border-right:none}
+.h-stat-num{font-family:'Noto Serif KR',serif;font-size:26px;color:#fff;font-weight:700;display:block;line-height:1}
+.h-stat-lbl{font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;letter-spacing:.5px}
+
+/* HERO DEMO CARD */
+.hero-demo{max-width:400px;margin:0 auto;position:relative;z-index:2}
+.demo-phone{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);border-radius:24px;padding:20px;overflow:hidden}
+.demo-notch{width:80px;height:5px;background:rgba(255,255,255,.1);border-radius:3px;margin:0 auto 18px}
+.demo-score-card{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:16px;margin-bottom:12px}
+.dsc-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dsc-date{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.5px}
+.dsc-badge{background:rgba(61,122,74,.2);border:1px solid rgba(61,122,74,.4);border-radius:10px;padding:2px 8px;font-size:9px;color:#7DC487}
+.dsc-score{font-family:'Noto Serif KR',serif;font-size:48px;color:var(--gold);font-weight:700;line-height:1;margin-bottom:4px}
+.dsc-label{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:10px}
+.dsc-bar-bg{background:rgba(255,255,255,.08);border-radius:4px;height:6px}
+.dsc-bar{height:6px;border-radius:4px;background:var(--gold);width:76%;transition:width 1s ease}
+.demo-jobs{display:flex;flex-direction:column;gap:7px}
+.demo-job{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.dj-left{display:flex;align-items:center;gap:8px}
+.dj-elem{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:12px;font-weight:700}
+.dj-title{font-size:12px;color:rgba(255,255,255,.75);font-weight:500}
+.dj-match{font-size:11px;font-weight:700;color:var(--gold)}
+.demo-bottom-bar{display:flex;justify-content:space-around;margin-top:14px;border-top:1px solid rgba(255,255,255,.06);padding-top:12px}
+.dbb-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:rgba(255,255,255,.3);cursor:pointer}
+.dbb-item.active{color:var(--gold)}
+.dbb-icon{font-size:16px}
+
+/* ─── SOCIAL PROOF ─── */
+.social-proof{background:var(--paper2);padding:48px 28px}
+.sp-inner{max-width:640px;margin:0 auto}
+.sp-head{text-align:center;margin-bottom:28px}
+.sp-kicker{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:8px}
+.sp-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:4px}
+
+/* LOGO STRIP */
+.logo-strip{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:36px;padding:16px 0;border-top:1px solid rgba(201,168,76,.15);border-bottom:1px solid rgba(201,168,76,.15)}
+.logo-pill{background:#fff;border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px}
+
+/* METRIC STRIP */
+.metric-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.metric-card{background:#fff;border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:16px 12px;text-align:center}
+.mc-num{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:4px}
+.mc-num span{font-size:14px;color:var(--gold-dk);font-weight:700}
+.mc-lbl{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* REVIEW GRID */
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rv-card{background:#fff;border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:14px}
+.rv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rv-stars{color:var(--gold);font-size:12px;letter-spacing:1px}
+.rv-tag{font-size:9px;background:var(--paper2);border-radius:8px;padding:2px 8px;color:var(--muted)}
+.rv-body{font-size:11px;color:var(--ink2);line-height:1.65;margin-bottom:10px}
+.rv-author{display:flex;align-items:center;gap:8px}
+.rv-ava{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.rv-name{font-size:10.5px;font-weight:600;color:var(--ink)}
+.rv-role{font-size:9px;color:var(--muted)}
+
+/* FEATURED REVIEW */
+.rv-featured{grid-column:1/-1;background:var(--ink);border:1px solid rgba(201,168,76,.25);border-radius:16px;padding:18px;display:flex;gap:16px;align-items:flex-start}
+.rv-quote{font-size:32px;color:var(--gold);font-family:'Noto Serif KR',serif;font-weight:700;line-height:1;flex-shrink:0;margin-top:-4px}
+.rv-f-body{font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:10px}
+.rv-f-name{font-size:11px;font-weight:600;color:#fff}
+.rv-f-role{font-size:9px;color:rgba(255,255,255,.4)}
+
+/* MEDIA MENTIONS */
+.media-bar{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:24px;justify-content:center}
+.media-pill{font-size:10px;color:var(--muted);letter-spacing:.5px;padding:4px 14px;border:1px solid var(--paper2);border-radius:12px;background:#fff}
+.media-label{font-size:10px;color:var(--muted);font-weight:500}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .55s ease both}
+.fu1{animation-delay:.05s}.fu2{animation-delay:.15s}.fu3{animation-delay:.25s}.fu4{animation-delay:.35s}.fu5{animation-delay:.45s}
+</style>
+
+<h2 class="sr-only">운트(Woon-T) 랜딩 페이지 — 히어로 & 소셜 프루프 섹션</h2>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="brand-seal">運</div>
+    <div>
+      <span class="brand-name">운트</span>
+      <span class="brand-en">WOON-T · MY LUCK &amp; TALENT</span>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a class="nav-item">서비스</a>
+    <a class="nav-item">기능</a>
+    <a class="nav-item">요금제</a>
+    <a class="nav-item">상담소</a>
+    <a class="nav-item">후기</a>
+    <button class="nav-start" onclick="sendPrompt('운트 무료로 시작하기')">무료 시작 →</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-circle hc1"></div>
+  <div class="hero-circle hc2"></div>
+  <div class="hero-circle hc3"></div>
+
+  <div class="hero-eyebrow fu fu1">
+    <span class="eyebrow-dot"></span>
+    사주 명리학 × 현대 커리어 AI · 2026 신규 오픈
+  </div>
+
+  <h1 class="hero-h1 fu fu2">
+    타고난 <span class="gold">기운(氣運)</span>으로<br>
+    찾는 <span class="under">최적의 커리어</span>
+  </h1>
+
+  <p class="hero-desc fu fu3">
+    생년월일시 하나로 사주 원국·오행·격국을 분석하고<br>
+    나에게 맞는 직무 Top 3와 90일 실천 로드맵을 제공합니다.<br>
+    무속이 아닌, 데이터 기반 커리어 가이드.
+  </p>
+
+  <div class="cta-pair fu fu3">
+    <button class="btn-main" onclick="sendPrompt('운트 무료 사주 분석 시작하기')">✦ 무료로 사주 분석하기</button>
+    <button class="btn-ghost" onclick="sendPrompt('운트 샘플 리포트 보여줘')">샘플 리포트 보기 →</button>
+  </div>
+
+  <div class="hero-stats fu fu4">
+    <div class="h-stat">
+      <span class="h-stat-num" id="cnt-users">0</span>
+      <div class="h-stat-lbl">누적 분석 수</div>
+    </div>
+    <div class="h-stat">
+      <span class="h-stat-num">4.9<span style="font-size:16px;color:var(--gold)">★</span></span>
+      <div class="h-stat-lbl">평균 만족도</div>
+    </div>
+    <div class="h-stat">
+      <span class="h-stat-num">3<span style="font-size:16px;color:rgba(255,255,255,.5)">분</span></span>
+      <div class="h-stat-lbl">분석 소요 시간</div>
+    </div>
+    <div class="h-stat">
+      <span class="h-stat-num">89<span style="font-size:16px;color:rgba(255,255,255,.5)">%</span></span>
+      <div class="h-stat-lbl">진로 만족 향상</div>
+    </div>
+  </div>
+
+  <!-- DEMO PHONE -->
+  <div class="hero-demo fu fu5">
+    <div class="demo-phone">
+      <div class="demo-notch"></div>
+
+      <div class="demo-score-card">
+        <div class="dsc-row">
+          <span class="dsc-date">2026.05.20 · 丙午日</span>
+          <span class="dsc-badge">오늘 면접 길일</span>
+        </div>
+        <div class="dsc-score">76</div>
+        <div class="dsc-label">오늘의 행운 지수 / 100</div>
+        <div class="dsc-bar-bg"><div class="dsc-bar"></div></div>
+      </div>
+
+      <div class="demo-jobs">
+        <div class="demo-job">
+          <div class="dj-left">
+            <div class="dj-elem" style="background:rgba(201,75,61,.15);color:#C94B3D">火</div>
+            <div class="dj-title">크리에이티브 디렉터</div>
+          </div>
+          <span class="dj-match">98%</span>
+        </div>
+        <div class="demo-job">
+          <div class="dj-left">
+            <div class="dj-elem" style="background:rgba(61,122,74,.15);color:#3D7A4A">木</div>
+            <div class="dj-title">브랜드 기획자</div>
+          </div>
+          <span class="dj-match">91%</span>
+        </div>
+        <div class="demo-job">
+          <div class="dj-left">
+            <div class="dj-elem" style="background:rgba(46,95,138,.15);color:#2E5F8A">水</div>
+            <div class="dj-title">글로벌 마케터</div>
+          </div>
+          <span class="dj-match">84%</span>
+        </div>
+      </div>
+
+      <div class="demo-bottom-bar">
+        <div class="dbb-item active"><span class="dbb-icon">🏠</span>홈</div>
+        <div class="dbb-item"><span class="dbb-icon">☯</span>사주</div>
+        <div class="dbb-item"><span class="dbb-icon">📅</span>캘린더</div>
+        <div class="dbb-item"><span class="dbb-icon">👥</span>상담소</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SOCIAL PROOF ═══ -->
+<div class="social-proof">
+  <div class="sp-inner">
+    <div class="sp-head">
+      <div class="sp-kicker">USER REVIEWS &amp; TRUST</div>
+      <div class="sp-title">32,000명이 이미 선택했습니다</div>
+    </div>
+
+    <!-- 파트너 로고 스트립 -->
+    <div class="logo-strip">
+      <span class="media-label">언론 보도</span>
+      <div class="logo-pill">조선일보</div>
+      <div class="logo-pill">중앙일보</div>
+      <div class="logo-pill">한국경제</div>
+      <div class="logo-pill">매일경제</div>
+      <div class="logo-pill">IT동아</div>
+    </div>
+
+    <!-- 숫자 지표 -->
+    <div class="metric-strip">
+      <div class="metric-card">
+        <div class="mc-num"><span id="cnt2">0</span>명</div>
+        <div class="mc-lbl">누적<br>분석 완료</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-num">4.9<span style="font-size:14px;color:var(--gold)">★</span></div>
+        <div class="mc-lbl">앱스토어<br>평균 별점</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-num">89<span style="font-size:14px">%</span></div>
+        <div class="mc-lbl">진로 만족도<br>향상</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-num">3<span style="font-size:14px">분</span></div>
+        <div class="mc-lbl">평균 분석<br>소요 시간</div>
+      </div>
+    </div>
+
+    <!-- 리뷰 그리드 -->
+    <div class="review-grid">
+
+      <!-- 피처드 리뷰 -->
+      <div class="rv-card rv-featured">
+        <div class="rv-quote">"</div>
+        <div>
+          <div class="rv-f-body">사주 분석인데 점집 느낌이 전혀 없어요. MBTI나 강점 검사보다 훨씬 구체적이고 직무까지 연결해줘서 놀랐습니다. 리포트 보고 UX 직군으로 방향 잡았고 3개월 뒤 네카라 취업에 성공했어요. 운트가 없었다면 여전히 방황하고 있었을 것 같아요.</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="rv-ava" style="background:rgba(61,122,74,.2)">🌿</div>
+            <div>
+              <div class="rv-f-name">김O연 님 · 26세</div>
+              <div class="rv-f-role">취업 준비생 → 네이버 UX 디자이너 · 木(나무) 일간</div>
+            </div>
+            <div style="margin-left:auto;color:var(--gold);font-size:13px">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 리뷰 2 -->
+      <div class="rv-card">
+        <div class="rv-top">
+          <span class="rv-stars">★★★★★</span>
+          <span class="rv-tag">이직 성공</span>
+        </div>
+        <div class="rv-body">운세 캘린더에서 추천한 날 서류를 냈더니 합격했어요. 우연이라기엔 분석 내용이 너무 정확해서 이제는 매달 캘린더 먼저 확인합니다.</div>
+        <div class="rv-author">
+          <div class="rv-ava" style="background:rgba(201,75,61,.1)">🔥</div>
+          <div>
+            <div class="rv-name">이O준 님 · 29세</div>
+            <div class="rv-role">3년차 마케터 → 스타트업 CMO</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 리뷰 3 -->
+      <div class="rv-card">
+        <div class="rv-top">
+          <span class="rv-stars">★★★★★</span>
+          <span class="rv-tag">창업 결정</span>
+        </div>
+        <div class="rv-body">창업 시기가 맞는지 확신이 없었는데, 대운 분석에서 2026~2027이 木火 상승기라는 걸 보고 결심했어요. 지금 초기 투자 유치 중입니다.</div>
+        <div class="rv-author">
+          <div class="rv-ava" style="background:rgba(46,95,138,.1)">🌊</div>
+          <div>
+            <div class="rv-name">박O진 님 · 33세</div>
+            <div class="rv-role">前 대기업 전략팀 → 스타트업 창업</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 미디어 -->
+    <div class="media-bar" style="margin-top:20px">
+      <span class="media-label">추천 받은 곳</span>
+      <div class="logo-pill">"MZ 취준생 필수앱" — 조선일보</div>
+      <div class="logo-pill">"데이터로 보는 사주" — 한국경제</div>
+      <div class="logo-pill">"AI가 바꾸는 커리어" — IT동아</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function countUp(id, target, suffix, duration) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0, step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.round(start).toLocaleString() + suffix;
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+setTimeout(() => {
+  countUp('cnt-users', 32000, '+', 1400);
+  countUp('cnt2', 32000, '', 1400);
+}, 400);
+</script>

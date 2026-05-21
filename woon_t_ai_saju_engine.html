@@ -1,0 +1,640 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;
+  --ink:#1A1A2E;--ink-mid:#2D2D4E;--paper:#FAF8F2;--paper-mid:#F0EDE0;
+  --muted:#8A8070;--border:rgba(201,168,76,0.25);
+  --fire:#C94B3D;--water:#2E5F8A;--wood:#3D7A4A;--metal:#7A8090;--earth:#8B6914;
+  --r:12px;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink)}
+.shell{max-width:500px;margin:0 auto;padding:20px;min-height:600px}
+
+/* STEP INDICATOR */
+.steps{display:flex;align-items:center;margin-bottom:24px}
+.step{display:flex;align-items:center;flex:1;gap:6px}
+.step-circle{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--muted);transition:all .3s;flex-shrink:0}
+.step-circle.active{background:var(--ink);border-color:var(--ink);color:var(--gold)}
+.step-circle.done{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.step-label{font-size:10px;color:var(--muted);letter-spacing:.3px}
+.step-line{flex:1;height:1px;background:var(--border);margin:0 4px}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px}
+.card-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:600;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title i{font-size:18px;color:var(--gold)}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.form-group label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.3px}
+.form-group input,.form-group select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--ink);font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--gold)}
+
+/* MANSE TABLE */
+.manse-table{width:100%;border-collapse:collapse;font-size:12px}
+.manse-table th{background:var(--ink);color:var(--gold);padding:8px 10px;text-align:center;font-weight:500;font-size:11px}
+.manse-table td{padding:10px;text-align:center;border-bottom:1px solid var(--border)}
+.manse-table .hanja{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;display:block;margin-bottom:2px}
+.manse-table .hangul{font-size:10px;color:var(--muted)}
+.stem-fire{color:var(--fire)}.stem-water{color:var(--water)}
+.stem-wood{color:var(--wood)}.stem-metal{color:var(--metal)}.stem-earth{color:var(--earth)}
+.branch-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;margin-top:4px}
+
+/* AI RESPONSE */
+.ai-panel{background:var(--ink);border-radius:16px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.ai-panel::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%)}
+.ai-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ai-icon{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ai-title{font-family:'Noto Serif KR',serif;font-size:14px;color:#fff;font-weight:600}
+.ai-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.ai-body{font-size:13px;color:rgba(255,255,255,.8);line-height:1.75;min-height:80px}
+.ai-body.loading{color:rgba(255,255,255,.35);font-style:italic}
+.ai-cursor{display:inline-block;width:2px;height:14px;background:var(--gold);margin-left:2px;vertical-align:middle;animation:blink .8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* OHAENG */
+.ohaeng-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.ohaeng-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center}
+.ohaeng-elem{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;margin-bottom:4px}
+.ohaeng-name{font-size:9px;color:var(--muted);margin-bottom:6px}
+.ohaeng-num{font-size:18px;font-weight:700;margin-bottom:2px}
+.ohaeng-bar-mini{height:4px;border-radius:2px;background:var(--paper-mid);margin:0 4px}
+.ohaeng-bar-fill-mini{height:4px;border-radius:2px;transition:width .8s}
+
+/* SECTIONS */
+.section-label{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:600;color:var(--ink);margin:16px 0 10px;display:flex;align-items:center;gap:6px}
+.section-label::before{content:'';width:3px;height:16px;background:var(--gold);border-radius:2px;display:block}
+
+/* DAEWOON TABLE */
+.daewoon-scroll{overflow-x:auto;margin-bottom:14px}
+.daewoon-table{width:100%;min-width:460px;border-collapse:collapse;font-size:11px}
+.daewoon-table th{background:var(--ink-mid);color:var(--gold-light);padding:8px 6px;text-align:center;font-weight:500}
+.daewoon-table td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--border)}
+.daewoon-table .current-row td{background:rgba(201,168,76,.07);font-weight:500}
+.dw-hanja{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700}
+.dw-score{display:inline-block;padding:2px 6px;border-radius:10px;font-size:10px;font-weight:600}
+.dw-high{background:rgba(61,122,74,.12);color:var(--wood)}
+.dw-mid{background:rgba(201,168,76,.12);color:var(--gold-dark)}
+.dw-low{background:rgba(201,75,61,.10);color:var(--fire)}
+
+/* JOB MATCH */
+.job-match-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.job-match-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px}
+.jm-rank{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--gold);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.jm-info{flex:1}
+.jm-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.jm-reason{font-size:11px;color:var(--muted)}
+.jm-score-wrap{text-align:right}
+.jm-score{font-size:18px;font-weight:700;color:var(--ink);display:block}
+.jm-bar{width:50px;height:4px;background:var(--paper-mid);border-radius:2px;margin-top:4px}
+.jm-bar-fill{height:4px;border-radius:2px;background:var(--gold)}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:14px;background:var(--ink);color:var(--gold);border:none;border-radius:10px;font-family:'Noto Serif KR',serif;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:6px}
+.btn-primary:hover{opacity:.85}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{padding:10px 18px;background:#fff;color:var(--ink);border:1px solid var(--border);border-radius:8px;font-family:'Noto Sans KR',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold-dark)}
+
+/* LOADING SPINNER */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(201,168,76,.3);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.hidden{display:none}
+.spacer{height:12px}
+
+/* YONGSIN / GYEOKGUK BADGES */
+.meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.meta-badge{background:var(--paper-mid);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--ink-mid)}
+.meta-badge strong{color:var(--gold-dark)}
+
+/* ERROR */
+.error-box{background:rgba(201,75,61,.07);border:1px solid rgba(201,75,61,.2);border-radius:10px;padding:14px;font-size:12px;color:var(--fire);margin-bottom:12px}
+</style>
+
+<h2 class="sr-only">운트 AI 사주 분석 엔진 — 만세력 + AI 진로 분석</h2>
+
+<div class="shell">
+  <!-- STEP INDICATOR -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle active" id="sc1">1</div>
+      <div class="step-label">생년월일 입력</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-circle" id="sc2">2</div>
+      <div class="step-label">만세력 분석</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-circle" id="sc3">3</div>
+      <div class="step-label">AI 진로 리포트</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: INPUT -->
+  <div id="step1">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-calendar-event" aria-hidden="true"></i> 기본 정보 입력</div>
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1">
+          <label>이름 (선택)</label>
+          <input type="text" id="inp-name" placeholder="홍길동" value="김미래">
+        </div>
+        <div class="form-group">
+          <label>생년월일</label>
+          <input type="date" id="inp-date" value="1993-07-15">
+        </div>
+        <div class="form-group">
+          <label>태어난 시</label>
+          <select id="inp-hour">
+            <option value="23">자시 (23–01시)</option>
+            <option value="1">축시 (01–03시)</option>
+            <option value="3">인시 (03–05시)</option>
+            <option value="5">묘시 (05–07시)</option>
+            <option value="7">진시 (07–09시)</option>
+            <option value="9">사시 (09–11시)</option>
+            <option value="11" selected>오시 (11–13시)</option>
+            <option value="13">미시 (13–15시)</option>
+            <option value="15">신시 (15–17시)</option>
+            <option value="17">유시 (17–19시)</option>
+            <option value="19">술시 (19–21시)</option>
+            <option value="21">해시 (21–23시)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>성별</label>
+          <select id="inp-gender">
+            <option value="female">여성</option>
+            <option value="male">남성</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>현재 상황</label>
+          <select id="inp-situation">
+            <option value="취업준비">취업 준비 중</option>
+            <option value="이직고민">이직 고민</option>
+            <option value="창업희망">창업 희망</option>
+            <option value="N잡탐색">N잡 탐색</option>
+            <option value="진로고민">전반적 진로 고민</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label>관심 직군 (선택)</label>
+          <input type="text" id="inp-interest" placeholder="예: 디자인, UX, 마케팅, 개발..." value="UX디자인, 브랜딩, 콘텐츠">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="runManse()">✦ 만세력 분석 시작</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: MANSE RESULT -->
+  <div id="step2" class="hidden">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-yin-yang" aria-hidden="true"></i> 사주 원국 (四柱 原局)</div>
+      <table class="manse-table" id="manse-table"></table>
+    </div>
+
+    <!-- 오행 분포 -->
+    <div class="section-label">오행 분포</div>
+    <div class="ohaeng-grid" id="ohaeng-grid"></div>
+
+    <!-- 격국·용신 -->
+    <div class="section-label">격국 · 용신 분석</div>
+    <div class="meta-row" id="meta-badges"></div>
+
+    <!-- 대운 -->
+    <div class="section-label">대운 흐름 (10년 주기)</div>
+    <div class="daewoon-scroll"><table class="daewoon-table" id="daewoon-table"></table></div>
+
+    <button class="btn-primary" onclick="runAI()"><span class="spinner" id="ai-spinner" style="display:none"></span><span id="ai-btn-text">✦ AI 진로 분석 요청</span></button>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- STEP 3: AI REPORT -->
+  <div id="step3" class="hidden">
+    <!-- AI 분석 패널 -->
+    <div class="ai-panel">
+      <div class="ai-header">
+        <div class="ai-icon">🤖</div>
+        <div>
+          <div class="ai-title">운트 AI 명리 분석</div>
+          <div class="ai-sub">Claude Sonnet 4 · 사주 진로 전문 프롬프트</div>
+        </div>
+      </div>
+      <div class="ai-body" id="ai-output">분석 중입니다...</div>
+    </div>
+
+    <!-- 직무 매칭 -->
+    <div class="section-label">AI 직무 매칭 결과</div>
+    <div class="job-match-list" id="job-list"></div>
+
+    <!-- 다시 분석 -->
+    <button class="btn-secondary" onclick="resetAll()" style="width:100%;margin-top:4px">← 다시 분석하기</button>
+    <div class="spacer"></div>
+  </div>
+
+  <div id="error-area"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   만세력(萬歲曆) 알고리즘
+   ══════════════════════════════════════════════ */
+
+const CHEONGAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const JIJI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const CG_KR = ['갑','을','병','정','무','기','경','신','임','계'];
+const JJ_KR = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+
+// 오행 매핑
+const CG_ELEM = {
+  '甲':'木','乙':'木','丙':'火','丁':'火','戊':'土','己':'土',
+  '庚':'金','辛':'金','壬':'水','癸':'水'
+};
+const JJ_ELEM = {
+  '子':'水','丑':'土','寅':'木','卯':'木','辰':'土','巳':'火',
+  '午':'火','未':'土','申':'金','酉':'金','戌':'土','亥':'水'
+};
+const ELEM_CLASS = {'木':'stem-wood','火':'stem-fire','土':'stem-earth','金':'stem-metal','水':'stem-water'};
+const ELEM_COLOR = {'木':'var(--wood)','火':'var(--fire)','土':'var(--earth)','金':'var(--metal)','水':'var(--water)'};
+
+// 천간 음양
+const CG_YIN = {'乙':1,'丁':1,'己':1,'辛':1,'癸':1};
+
+// 기준: 1900년 1월 1일 = 庚子年 庚子月? 
+// 실제 만세력: 갑자년 기준 60갑자 순환
+// 1900년 = 庚子년: 천간4(庚), 지지0(子)
+// 1900.1.1 기준 일진: 甲戌 (천간0, 지지10) 실측 기준 보정 +1
+const BASE_YEAR = 1900;
+const BASE_YEAR_CG = 6; // 庚
+const BASE_YEAR_JJ = 0; // 子
+
+// 년주 계산
+function getYearPillar(year) {
+  const cg = (BASE_YEAR_CG + (year - BASE_YEAR)) % 10;
+  const jj = (BASE_YEAR_JJ + (year - BASE_YEAR)) % 12;
+  return { cg: CHEONGAN[cg], jj: JIJI[jj], cgKr: CG_KR[cg], jjKr: JJ_KR[jj] };
+}
+
+// 절기표 (월주 계산용) - 각 달의 절입일 (양력 근사)
+const SEOLJE = [6,4,6,5,6,6,7,8,8,8,8,7]; // 각 월 절입일 (평균값)
+const MONTH_OFFSET_CG = [2,4,6,8,0,2,4,6,8,0,2,4]; // 인월=甲子년 기준 丙
+
+function getMonthPillar(year, month, day) {
+  // 절기 기준으로 월주 계산 (근사)
+  const monthIdx = day >= SEOLJE[month-1] ? month - 1 : month - 2;
+  const mi = ((monthIdx + 12) % 12);
+  // 년간에 따른 월간 오프셋
+  const yCg = (BASE_YEAR_CG + (year - BASE_YEAR)) % 10;
+  const baseMonthCg = (yCg % 5) * 2; // 甲己年→丙寅月
+  const cg = (baseMonthCg + mi) % 10;
+  const jj = (mi + 2) % 12; // 인월(寅)부터
+  return { cg: CHEONGAN[cg], jj: JIJI[jj], cgKr: CG_KR[cg], jjKr: JJ_KR[jj] };
+}
+
+function getDayPillar(year, month, day) {
+  // 1900.1.1 = 甲戌 (cg=0, jj=10)
+  const d0 = new Date(1900, 0, 1);
+  const d1 = new Date(year, month - 1, day);
+  const diff = Math.round((d1 - d0) / 86400000);
+  const cg = ((diff % 10) + 10) % 10;
+  const jj = ((diff % 12) + 12) % 12;
+  return { cg: CHEONGAN[cg], jj: JIJI[(jj + 10) % 12], cgKr: CG_KR[cg], jjKr: JJ_KR[(jj+10)%12] };
+}
+
+function getHourPillar(dayCg, hour) {
+  // 일간 기반 시간 계산
+  const dayCgIdx = CHEONGAN.indexOf(dayCg);
+  const hourBranch = Math.floor(((hour + 1) % 24) / 2);
+  const baseHourCg = (dayCgIdx % 5) * 2;
+  const cg = (baseHourCg + hourBranch) % 10;
+  return { cg: CHEONGAN[cg], jj: JIJI[hourBranch], cgKr: CG_KR[cg], jjKr: JJ_KR[hourBranch] };
+}
+
+// 오행 점수 계산
+function calcOhaeng(pillars) {
+  const score = { '木':0, '火':0, '土':0, '金':0, '水':0 };
+  pillars.forEach(p => {
+    if (CG_ELEM[p.cg]) score[CG_ELEM[p.cg]] += 2;
+    if (JJ_ELEM[p.jj]) score[JJ_ELEM[p.jj]] += 1;
+  });
+  return score;
+}
+
+// 일간 기준 격국 추론
+function getGyeokguk(ilgan, score) {
+  const elem = CG_ELEM[ilgan];
+  const maxElem = Object.entries(score).sort((a,b)=>b[1]-a[1])[0][0];
+  const map = {
+    '木': { same: '비겁격 (독립가형)', diff: maxElem === '火' ? '식상격 (크리에이터형)' : '재성격 (사업가형)' },
+    '火': { same: '비겁격 (열정가형)', diff: maxElem === '土' ? '식상격 (기획가형)' : '인성격 (학자형)' },
+    '土': { same: '비겁격 (안정추구형)', diff: maxElem === '金' ? '식상격 (전략가형)' : '관성격 (관리자형)' },
+    '金': { same: '비겁격 (승부사형)', diff: maxElem === '水' ? '식상격 (분석가형)' : '인성격 (연구자형)' },
+    '水': { same: '비겁격 (자유인형)', diff: maxElem === '木' ? '식상격 (기획자형)' : '재성격 (전문가형)' },
+  };
+  const sameElem = score[elem];
+  return sameElem >= 6 ? (map[elem]?.same || '종격') : (map[elem]?.diff || '잡기격');
+}
+
+// 용신 추론
+function getYongsin(ilgan, score) {
+  const elem = CG_ELEM[ilgan];
+  const generates = { '木':'火', '火':'土', '土':'金', '金':'水', '水':'木' };
+  const controls = { '木':'土', '火':'金', '土':'水', '金':'木', '水':'火' };
+  const weakElems = Object.entries(score).filter(([e,v]) => v <= 2).map(([e]) => e);
+  // 일간 기운 강약
+  const selfScore = score[elem] || 0;
+  if (selfScore >= 6) {
+    return `${controls[elem]} · ${generates[elem]} (일간 과강 → 설기·제화)`;
+  } else {
+    return `${elem} · ${generates[controls[elem]] || '木'} (일간 약 → 부조·보강)`;
+  }
+}
+
+// 대운 계산 (근사)
+function getDaewoon(year, month, day, gender, ilganCg) {
+  const isYin = CG_YIN[ilganCg] ? 1 : 0;
+  const isForward = (isYin === 0 && gender === 'male') || (isYin === 1 && gender === 'female');
+  const currentAge = new Date().getFullYear() - year;
+  const daewoons = [];
+  let startAge = 3 + (isForward ? 0 : 0); // 대운수 (간략화: 3세 시작)
+  for (let i = 0; i < 8; i++) {
+    const age = startAge + i * 10;
+    const offset = isForward ? i + 1 : -(i + 1);
+    const monthP = getMonthPillar(year, month + offset, day);
+    const luck = age <= currentAge && currentAge < age + 10;
+    const score = (Math.random() * 30 + 55) | 0; // 시연용 운 점수
+    daewoons.push({ age, cg: monthP.cg, jj: monthP.jj, cgKr: monthP.cgKr, jjKr: monthP.jjKr, current: luck, score });
+  }
+  return daewoons;
+}
+
+/* ═══════════════════════════════════════════════
+   UI 렌더링
+   ══════════════════════════════════════════════ */
+
+let SAJU_DATA = null;
+
+function runManse() {
+  const dateVal = document.getElementById('inp-date').value;
+  if (!dateVal) { showError('생년월일을 입력해주세요.'); return; }
+  const [y,m,d] = dateVal.split('-').map(Number);
+  const hour = parseInt(document.getElementById('inp-hour').value);
+  const gender = document.getElementById('inp-gender').value;
+  const name = document.getElementById('inp-name').value || '사용자';
+
+  // 사주 계산
+  const yearP = getYearPillar(y);
+  const monthP = getMonthPillar(y, m, d);
+  const dayP = getDayPillar(y, m, d);
+  const hourP = getHourPillar(dayP.cg, hour);
+  const pillars = [yearP, monthP, dayP, hourP];
+  const ohaeng = calcOhaeng(pillars);
+  const gyeokguk = getGyeokguk(dayP.cg, ohaeng);
+  const yongsin = getYongsin(dayP.cg, ohaeng);
+  const daewoons = getDaewoon(y, m, d, gender, dayP.cg);
+  SAJU_DATA = { name, y, m, d, hour, gender, yearP, monthP, dayP, hourP, pillars, ohaeng, gyeokguk, yongsin, daewoons,
+    situation: document.getElementById('inp-situation').value,
+    interest: document.getElementById('inp-interest').value };
+
+  renderManse(pillars, ohaeng, gyeokguk, yongsin, daewoons);
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+  setStep(2);
+}
+
+function renderManse(pillars, ohaeng, gyeokguk, yongsin, daewoons) {
+  const labels = ['년주(年柱)','월주(月柱)','일주(日柱)','시주(時柱)'];
+  const notes = ['태어난 해','태어난 달','태어난 날 (일간=나)','태어난 시'];
+  const tbl = document.getElementById('manse-table');
+  tbl.innerHTML = `<thead><tr>
+    <th>구분</th>
+    ${labels.map((l,i)=>`<th>${l}<br><span style="font-size:9px;opacity:.6">${notes[i]}</span></th>`).join('')}
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td style="font-size:11px;color:var(--muted)">천간<br>(天干)</td>
+      ${pillars.map((p,i)=>`<td>
+        <span class="hanja ${ELEM_CLASS[CG_ELEM[p.cg]]}" style="color:${ELEM_COLOR[CG_ELEM[p.cg]]}">${p.cg}</span>
+        <span class="hangul">${p.cgKr} (${CG_ELEM[p.cg]})</span>
+        ${i===2?'<br><span style="font-size:9px;background:var(--gold);color:var(--ink);border-radius:4px;padding:1px 5px">일간</span>':''}
+      </td>`).join('')}
+    </tr>
+    <tr>
+      <td style="font-size:11px;color:var(--muted)">지지<br>(地支)</td>
+      ${pillars.map(p=>`<td>
+        <span class="hanja ${ELEM_CLASS[JJ_ELEM[p.jj]]}" style="color:${ELEM_COLOR[JJ_ELEM[p.jj]]}">${p.jj}</span>
+        <span class="hangul">${p.jjKr} (${JJ_ELEM[p.jj]})</span>
+      </td>`).join('')}
+    </tr>
+  </tbody>`;
+
+  // 오행 그리드
+  const oGrid = document.getElementById('ohaeng-grid');
+  const total = Object.values(ohaeng).reduce((a,b)=>a+b,0);
+  const elems = [['木','🌿'],['火','🔥'],['土','🪨'],['金','⚔️'],['水','💧']];
+  oGrid.innerHTML = elems.map(([e,emoji])=>{
+    const v = ohaeng[e]||0;
+    const pct = total ? Math.round(v/total*100) : 0;
+    return `<div class="ohaeng-card">
+      <div class="ohaeng-elem" style="color:${ELEM_COLOR[e]}">${e}</div>
+      <div class="ohaeng-name">${emoji} ${v}점</div>
+      <div class="ohaeng-num" style="color:${ELEM_COLOR[e]}">${pct}%</div>
+      <div class="ohaeng-bar-mini"><div class="ohaeng-bar-fill-mini" style="width:${pct}%;background:${ELEM_COLOR[e]}"></div></div>
+    </div>`;
+  }).join('');
+
+  // 격국·용신 배지
+  document.getElementById('meta-badges').innerHTML = `
+    <div class="meta-badge">격국: <strong>${gyeokguk}</strong></div>
+    <div class="meta-badge">일간: <strong style="color:${ELEM_COLOR[CG_ELEM[SAJU_DATA.dayP.cg]]}">${SAJU_DATA.dayP.cg}(${CG_ELEM[SAJU_DATA.dayP.cg]})</strong></div>
+    <div class="meta-badge">용신: <strong>${yongsin}</strong></div>
+  `;
+
+  // 대운 표
+  const dwTbl = document.getElementById('daewoon-table');
+  dwTbl.innerHTML = `<thead><tr><th>시작나이</th><th>천간</th><th>지지</th><th>운세</th><th>비고</th></tr></thead>
+  <tbody>${daewoons.map(dw=>`<tr class="${dw.current?'current-row':''}">
+    <td style="font-weight:${dw.current?600:400}">${dw.age}세~</td>
+    <td><span class="dw-hanja ${ELEM_CLASS[CG_ELEM[dw.cg]||'土']}" style="color:${ELEM_COLOR[CG_ELEM[dw.cg]||'土']}">${dw.cg}</span></td>
+    <td><span class="dw-hanja ${ELEM_CLASS[JJ_ELEM[dw.jj]||'土']}" style="color:${ELEM_COLOR[JJ_ELEM[dw.jj]||'土']}">${dw.jj}</span></td>
+    <td><span class="dw-score ${dw.score>=75?'dw-high':dw.score>=60?'dw-mid':'dw-low'}">${dw.score}점</span></td>
+    <td style="font-size:10px;color:var(--muted)">${dw.current?'▶ 현재 대운':''}</td>
+  </tr>`).join('')}</tbody>`;
+}
+
+async function runAI() {
+  const btn = document.getElementById('ai-btn-text');
+  const spinner = document.getElementById('ai-spinner');
+  btn.textContent = ' AI 분석 중...';
+  spinner.style.display = 'inline-block';
+  document.querySelector('.btn-primary').disabled = true;
+
+  const d = SAJU_DATA;
+  const prompt = `당신은 명리학(사주 명리)과 현대 커리어 컨설팅을 결합한 전문 AI '운트(Woon-T)'입니다.
+
+아래 사주 데이터를 분석하여 한국어로 진로 상담 리포트를 작성하세요.
+
+【기본 정보】
+- 이름: ${d.name}
+- 생년월일: ${d.y}년 ${d.m}월 ${d.d}일 ${d.hour}시
+- 성별: ${d.gender === 'female' ? '여성' : '남성'}
+- 현재 상황: ${d.situation}
+- 관심 분야: ${d.interest}
+
+【사주 원국】
+- 년주: ${d.yearP.cg}${d.yearP.jj} (${d.yearP.cgKr}${d.yearP.jjKr})
+- 월주: ${d.monthP.cg}${d.monthP.jj} (${d.monthP.cgKr}${d.monthP.jjKr})
+- 일주: ${d.dayP.cg}${d.dayP.jj} (${d.dayP.cgKr}${d.dayP.jjKr}) ← 일간
+- 시주: ${d.hourP.cg}${d.hourP.jj} (${d.hourP.cgKr}${d.hourP.jjKr})
+
+【오행 분포】
+${Object.entries(d.ohaeng).map(([e,v])=>`${e}: ${v}점`).join(', ')}
+
+【격국 및 용신】
+- 격국: ${d.gyeokguk}
+- 용신: ${d.yongsin}
+
+다음 형식으로 분석해주세요 (각 섹션 명확히):
+1. [성격 분석] 일간과 격국 기반 핵심 성향 (3-4문장)
+2. [강점 직군] 오행과 격국 기반 최적 직군 Top3 - 각각 이유 포함
+3. [현재 운세 조언] ${d.situation} 상황에서 지금 해야 할 일 (구체적으로)
+4. [주의사항] 부족한 오행 기준 보완할 점
+
+무속적 표현 금지. 심리학·데이터 기반 언어로 현대적으로 표현.
+각 섹션을 줄바꿈으로 구분하고, 친근하고 실질적으로 작성.`;
+
+  try {
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.remove('hidden');
+    setStep(3);
+    document.getElementById('ai-output').innerHTML = '<span class="ai-cursor"></span>';
+    document.getElementById('ai-output').classList.add('loading');
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.content?.find(c => c.type === 'text')?.text || '분석 결과를 불러오지 못했습니다.';
+
+    // 스트리밍 효과
+    document.getElementById('ai-output').classList.remove('loading');
+    await typeText('ai-output', formatAIText(text));
+    renderJobMatch(d);
+
+  } catch(e) {
+    document.getElementById('ai-output').classList.remove('loading');
+    document.getElementById('ai-output').innerHTML = `<span style="color:rgba(255,100,100,.8)">⚠️ API 오류: ${e.message}<br><br>시연 모드로 샘플 분석을 표시합니다.</span>`;
+    await sleep(1200);
+    await typeText('ai-output', formatAIText(getSampleAnalysis(d)));
+    renderJobMatch(d);
+  }
+
+  spinner.style.display = 'none';
+  btn.textContent = '✦ AI 진로 분석 요청';
+  document.querySelector('.btn-primary').disabled = false;
+}
+
+function formatAIText(text) {
+  return text
+    .replace(/\[성격 분석\]/g, '<span style="color:var(--gold-light);font-weight:600">✦ 성격 분석</span>')
+    .replace(/\[강점 직군\]/g, '<br><span style="color:var(--gold-light);font-weight:600">✦ 강점 직군</span>')
+    .replace(/\[현재 운세 조언\]/g, '<br><span style="color:var(--gold-light);font-weight:600">✦ 현재 운세 조언</span>')
+    .replace(/\[주의사항\]/g, '<br><span style="color:var(--gold-light);font-weight:600">✦ 주의사항</span>')
+    .replace(/Top3|Top 3/g, 'Top 3')
+    .replace(/\n/g, '<br>');
+}
+
+function getSampleAnalysis(d) {
+  return `[성격 분석]
+${d.name}님은 ${d.dayP.cg}(${CG_ELEM[d.dayP.cg]}) 일간으로, ${d.gyeokguk.replace('격','격의')} 기질을 타고났습니다. 창의적 직관과 실행력이 뛰어나며, 새로운 아이디어를 세상에 구현하는 데서 깊은 만족감을 얻습니다. 다양한 영역에 관심이 많아 멀티플레이어로 활약하기에 적합하며, 자유로운 환경에서 최고의 퍼포먼스를 발휘합니다.
+
+[강점 직군]
+① UX/브랜드 디자이너 — 火의 직관력과 木의 성장 감각이 결합하여, 사용자 심리를 꿰뚫는 디자인 전략에 강점을 가집니다.
+② 크리에이티브 디렉터 — 격국 기반 리더십과 상관의 표현 에너지가 팀을 이끄는 창작 총괄직에 최적입니다.
+③ 콘텐츠 기획/마케터 — 트렌드를 빠르게 포착하는 역마의 감각으로 글로벌 콘텐츠 기획에서 두각을 나타냅니다.
+
+[현재 운세 조언]
+${d.situation} 상황에서 지금은 준비보다 '시작'이 중요한 시기입니다. 현재 대운이 木·火 기운의 상승기로, 도전에 유리한 에너지가 흐르고 있습니다. 포트폴리오 1건을 완성하거나 관심 분야의 네트워킹 이벤트에 참석하는 작은 실행이 큰 전환점이 됩니다.
+
+[주의사항]
+金·水 기운이 상대적으로 약하므로, 치밀한 계획 수립과 재무 관리에 특별히 주의가 필요합니다. 분석적 사고를 보완하기 위해 데이터 기반 의사결정 훈련을 병행하면 용신 에너지를 효과적으로 보충할 수 있습니다.`;
+}
+
+async function typeText(id, html) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  const fullText = div.innerHTML;
+  let i = 0;
+  const step = 3;
+  return new Promise(res => {
+    const timer = setInterval(() => {
+      i += step;
+      el.innerHTML = fullText.slice(0, i);
+      if (i >= fullText.length) { el.innerHTML = fullText; clearInterval(timer); res(); }
+    }, 12);
+  });
+}
+
+function renderJobMatch(d) {
+  const elem = CG_ELEM[d.dayP.cg];
+  const jobMap = {
+    '木': [{t:'UX/서비스 디자이너',r:'木의 성장·조화 에너지',s:95},{t:'브랜드 기획자',r:'장기 비전 설계 강점',s:88},{t:'스타트업 창업',r:'개척·선도 기질',s:82}],
+    '火': [{t:'크리에이티브 디렉터',r:'火의 표현·열정 에너지',s:97},{t:'콘텐츠 프로듀서',r:'상관의 창의 발산',s:90},{t:'글로벌 마케터',r:'역마+火의 홍보력',s:84}],
+    '土': [{t:'프로젝트 매니저',r:'土의 중재·조율 에너지',s:93},{t:'전략 컨설턴트',r:'안정적 판단력',s:87},{t:'HR 전문가',r:'사람 관계 조율 강점',s:80}],
+    '金': [{t:'데이터 분석가',r:'金의 정밀·분석 에너지',s:96},{t:'재무/투자 기획',r:'수익 구조 설계 강점',s:91},{t:'IT 아키텍트',r:'정교한 시스템 설계',s:85}],
+    '水': [{t:'연구·개발 전문가',r:'水의 깊이·탐구 에너지',s:94},{t:'데이터 사이언티스트',r:'지식 축적·통찰력',s:89},{t:'에듀테크 기획',r:'지식 전달의 전문성',s:83}],
+  };
+  const jobs = jobMap[elem] || jobMap['火'];
+  document.getElementById('job-list').innerHTML = jobs.map((j,i)=>`
+    <div class="job-match-item">
+      <div class="jm-rank">${i+1}</div>
+      <div class="jm-info">
+        <div class="jm-title">${j.t}</div>
+        <div class="jm-reason">${j.r}</div>
+      </div>
+      <div class="jm-score-wrap">
+        <span class="jm-score">${j.s}%</span>
+        <div class="jm-bar"><div class="jm-bar-fill" style="width:${j.s}%"></div></div>
+      </div>
+    </div>`).join('');
+}
+
+function setStep(n) {
+  for(let i=1;i<=3;i++){
+    const c = document.getElementById('sc'+i);
+    c.classList.remove('active','done');
+    if(i<n) c.classList.add('done');
+    else if(i===n) c.classList.add('active');
+  }
+}
+
+function resetAll() {
+  document.getElementById('step3').classList.add('hidden');
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step1').classList.remove('hidden');
+  document.getElementById('ai-output').innerHTML = '분석 중입니다...';
+  document.getElementById('job-list').innerHTML = '';
+  setStep(1);
+}
+
+function showError(msg) {
+  document.getElementById('error-area').innerHTML = `<div class="error-box">⚠️ ${msg}</div>`;
+  setTimeout(()=>document.getElementById('error-area').innerHTML='', 3000);
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+</script>

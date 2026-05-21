@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables (비밀 키 포함 — 절대 커밋 금지)
+.env
+*.env.local
+*.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Alembic
+migrations/versions/__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code 메모리 (로컬 전용)
+.claude/
+
+# Temp / Office lock files
+~$*
+*.tmp
+
+# PDF 샘플 (용량 큰 바이너리)
+*.pdf
+
+# EMM (마인드맵)
+*.emm

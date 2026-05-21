@@ -1,0 +1,527 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1A1A2E;--ink2:#2D2D4E;--paper:#FAF8F2;--paper2:#F0EDE0;
+  --gold:#C9A84C;--gold-lt:#E8D5A3;--gold-dk:#8B6914;--muted:#8A8070;
+  --fire:#C94B3D;--water:#2E5F8A;--wood:#3D7A4A;--metal:#7A8090;--earth:#8B6914;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+
+/* SECTION SHELL */
+section{padding:60px 28px}
+.s-max{max-width:640px;margin:0 auto}
+.s-eyebrow{display:inline-block;font-size:10px;letter-spacing:1.5px;color:var(--gold-dk);background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:4px 12px;margin-bottom:14px}
+.s-h2{font-family:'Noto Serif KR',serif;font-size:clamp(20px,3.8vw,30px);font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:8px}
+.s-h2 em{color:var(--gold);font-style:normal}
+.s-sub{font-size:13px;color:var(--muted);line-height:1.75;max-width:460px;margin-bottom:0}
+.s-bar{width:36px;height:3px;background:var(--gold);border-radius:2px;margin:14px 0 28px}
+
+/* ─── FEATURE TABS ─── */
+.feature-tabs-section{background:#fff}
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--paper2);margin-bottom:28px;overflow-x:auto}
+.tab-btn{padding:12px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;font-family:'Noto Sans KR',sans-serif;transition:all .2s}
+.tab-btn.active{color:var(--ink);border-bottom-color:var(--gold)}
+.tab-content{display:none}
+.tab-content.active{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.feat-big{background:var(--ink);border-radius:16px;padding:22px;grid-row:1/3}
+.fb-tag{display:inline-block;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:10px;padding:3px 10px;font-size:9px;color:var(--gold-lt);letter-spacing:.5px;margin-bottom:12px}
+.fb-title{font-family:'Noto Serif KR',serif;font-size:17px;color:#fff;font-weight:600;margin-bottom:8px;line-height:1.35}
+.fb-desc{font-size:11.5px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:16px}
+.fb-visual{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:14px}
+
+.feat-sm{background:var(--paper);border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:16px;transition:border-color .2s}
+.feat-sm:hover{border-color:var(--gold)}
+.fs-icon{font-size:22px;margin-bottom:8px}
+.fs-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.fs-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.fs-pill{display:inline-block;background:var(--paper2);border-radius:8px;padding:2px 8px;font-size:9px;color:var(--muted);margin-top:8px}
+
+/* 오행 미니 차트 (in feat big) */
+.oh-mini{display:flex;flex-direction:column;gap:5px}
+.oh-mini-row{display:flex;align-items:center;gap:7px}
+.oh-mini-lbl{font-family:'Noto Serif KR',serif;font-size:13px;font-weight:700;width:16px;flex-shrink:0}
+.oh-mini-track{flex:1;background:rgba(255,255,255,.08);border-radius:3px;height:6px}
+.oh-mini-fill{height:6px;border-radius:3px;transition:width .9s ease}
+.oh-mini-pct{font-size:9px;color:rgba(255,255,255,.4);width:28px;text-align:right}
+.persona-preview{margin-top:12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px}
+.pp-emoji{font-size:18px}
+.pp-name{font-size:12px;font-weight:600;color:#fff;margin-bottom:1px}
+.pp-type{font-size:9px;color:rgba(255,255,255,.4)}
+
+/* DAEWOON MINI */
+.dw-mini{display:flex;gap:4px;flex-wrap:wrap}
+.dw-pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 8px;text-align:center}
+.dw-hanja{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700}
+.dw-age{font-size:8px;color:rgba(255,255,255,.35);margin-top:1px}
+.dw-current{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.08)}
+
+/* CALENDAR MINI */
+.cal-mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:9px;text-align:center}
+.cm-day{padding:4px 2px;border-radius:5px;color:rgba(255,255,255,.4)}
+.cm-day.gold{background:rgba(201,168,76,.2);color:var(--gold);font-weight:700}
+.cm-day.today{background:var(--gold);color:var(--ink);font-weight:700}
+.cm-day.dim{color:rgba(255,255,255,.15)}
+.cm-wk{color:rgba(255,255,255,.25);font-size:8px;margin-bottom:2px}
+
+/* JOB MATCH MINI */
+.jm-mini{display:flex;flex-direction:column;gap:7px}
+.jm-row{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border-radius:8px;padding:8px 10px}
+.jm-elem{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:10px;font-weight:700;flex-shrink:0}
+.jm-title-mini{flex:1;font-size:11px;color:rgba(255,255,255,.7);font-weight:500}
+.jm-score-mini{font-size:11px;font-weight:700;color:var(--gold)}
+
+/* ─── INTERACTIVE 오행 QUIZ ─── */
+.quiz-section{background:var(--ink)}
+.quiz-section .s-h2{color:#fff}
+.quiz-section .s-sub{color:rgba(255,255,255,.45)}
+.quiz-section .s-eyebrow{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.25);color:var(--gold-lt)}
+
+.quiz-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.18);border-radius:20px;padding:24px;margin-top:4px}
+.quiz-progress{display:flex;gap:4px;margin-bottom:20px}
+.qp-step{flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;transition:background .4s}
+.qp-step.done{background:var(--gold)}
+.qp-step.active{background:rgba(201,168,76,.5)}
+
+.quiz-q{font-family:'Noto Serif KR',serif;font-size:15px;color:#fff;font-weight:600;margin-bottom:6px;line-height:1.4}
+.quiz-hint{font-size:11px;color:rgba(255,255,255,.35);margin-bottom:18px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quiz-opt{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .2s;text-align:left;font-family:'Noto Sans KR',sans-serif}
+.quiz-opt:hover{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.06)}
+.quiz-opt.selected{border-color:var(--gold);background:rgba(201,168,76,.12)}
+.qo-emoji{font-size:18px;margin-bottom:5px;display:block}
+.qo-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:2px}
+.qo-desc{font-size:10px;color:rgba(255,255,255,.35);line-height:1.5}
+.quiz-nav{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+.q-btn-next{background:var(--gold);color:var(--ink);border:none;border-radius:20px;padding:9px 22px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:opacity .2s}
+.q-btn-next:hover{opacity:.85}
+.q-btn-next:disabled{opacity:.3;cursor:not-allowed}
+.q-btn-skip{background:none;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);border-radius:20px;padding:8px 16px;font-size:11px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+
+/* QUIZ RESULT */
+.quiz-result{display:none;text-align:center;padding:10px 0}
+.qr-elem{font-family:'Noto Serif KR',serif;font-size:56px;font-weight:700;margin-bottom:4px;line-height:1}
+.qr-persona{font-family:'Noto Serif KR',serif;font-size:18px;color:#fff;font-weight:600;margin-bottom:6px}
+.qr-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:16px;max-width:340px;margin-left:auto;margin-right:auto}
+.qr-jobs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.qr-job{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.7)}
+.qr-cta{background:var(--gold);color:var(--ink);border:none;border-radius:20px;padding:12px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Serif KR',serif;letter-spacing:.3px}
+.qr-retry{background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);border-radius:20px;padding:10px 18px;font-size:11px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-left:8px}
+
+/* ─── HOW IT WORKS TIMELINE ─── */
+.hiw-section{background:var(--paper2)}
+.timeline{position:relative;padding-left:32px;margin-top:8px}
+.timeline::before{content:'';position:absolute;left:12px;top:8px;bottom:8px;width:1px;background:rgba(201,168,76,.3)}
+.tl-item{position:relative;margin-bottom:24px;padding-bottom:4px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-32px;top:4px;width:26px;height:26px;border-radius:50%;background:var(--ink);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);font-family:'Noto Sans KR',sans-serif;z-index:1}
+.tl-card{background:#fff;border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:16px}
+.tl-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tl-icon{font-size:20px}
+.tl-head{flex:1}
+.tl-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.tl-time{font-size:10px;color:var(--muted)}
+.tl-desc{font-size:11.5px;color:var(--muted);line-height:1.65;margin-bottom:8px}
+.tl-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tl-tag{background:var(--paper2);border-radius:8px;padding:2px 8px;font-size:9px;color:var(--muted)}
+.tl-highlight{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--gold-dk)}
+</style>
+
+<h2 class="sr-only">운트 랜딩 — 기능 상세, 오행 자가진단, 사용 흐름</h2>
+
+<!-- ═══ FEATURE TABS ═══ -->
+<section class="feature-tabs-section">
+  <div class="s-max">
+    <div class="s-eyebrow">CORE FEATURES</div>
+    <h2 class="s-h2">무속이 아닌, <em>데이터</em>로 보는 사주</h2>
+    <p class="s-sub">전통 명리학의 분석력과 현대 AI의 정확도를 결합한 4가지 핵심 기능</p>
+    <div class="s-bar"></div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('manse',this)">AI 만세력 분석</button>
+      <button class="tab-btn" onclick="switchTab('match',this)">직무 매칭</button>
+      <button class="tab-btn" onclick="switchTab('cal',this)">운세 캘린더</button>
+      <button class="tab-btn" onclick="switchTab('daewoon',this)">대운 흐름</button>
+    </div>
+
+    <!-- 만세력 탭 -->
+    <div class="tab-content active" id="tab-manse">
+      <div class="feat-big">
+        <div class="fb-tag">AI MANSE ENGINE</div>
+        <div class="fb-title">생년월일시 하나로<br>완전한 사주 원국 분석</div>
+        <div class="fb-desc">사주 팔자(四柱八字)를 자동 계산하고 오행 분포·격국·용신까지 도출합니다. "역마살" 대신 "글로벌 활동가" 등 현대 직무 언어로 재해석.</div>
+        <div class="fb-visual">
+          <div class="oh-mini" id="oh-bars">
+            <div class="oh-mini-row"><span class="oh-mini-lbl" style="color:#C94B3D">火</span><div class="oh-mini-track"><div class="oh-mini-fill" style="width:68%;background:#C94B3D"></div></div><span class="oh-mini-pct">68%</span></div>
+            <div class="oh-mini-row"><span class="oh-mini-lbl" style="color:#3D7A4A">木</span><div class="oh-mini-track"><div class="oh-mini-fill" style="width:42%;background:#3D7A4A"></div></div><span class="oh-mini-pct">42%</span></div>
+            <div class="oh-mini-row"><span class="oh-mini-lbl" style="color:#2E5F8A">水</span><div class="oh-mini-track"><div class="oh-mini-fill" style="width:25%;background:#2E5F8A"></div></div><span class="oh-mini-pct">25%</span></div>
+            <div class="oh-mini-row"><span class="oh-mini-lbl" style="color:#8B6914">土</span><div class="oh-mini-track"><div class="oh-mini-fill" style="width:18%;background:#8B6914"></div></div><span class="oh-mini-pct">18%</span></div>
+            <div class="oh-mini-row"><span class="oh-mini-lbl" style="color:#7A8090">金</span><div class="oh-mini-track"><div class="oh-mini-fill" style="width:12%;background:#7A8090"></div></div><span class="oh-mini-pct">12%</span></div>
+          </div>
+          <div class="persona-preview" style="margin-top:10px">
+            <span class="pp-emoji">🦋</span>
+            <div><div class="pp-name">창조적 탐험가</div><div class="pp-type">丁火 일간 · 상관격 · 용신: 水·金</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">📋</div>
+        <div class="fs-title">사주 팔자 자동 계산</div>
+        <div class="fs-desc">년·월·일·시 4기둥을 만세력 알고리즘으로 정밀 산출. 오차 없이 천간·지지 도출.</div>
+        <span class="fs-pill">만세력 알고리즘</span>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">🎭</div>
+        <div class="fs-title">10가지 페르소나 카드</div>
+        <div class="fs-desc">격국과 오행 조합 기반으로 나만의 직업 페르소나 캐릭터 카드 발급. SNS 공유 가능.</div>
+        <span class="fs-pill">공유 가능</span>
+      </div>
+    </div>
+
+    <!-- 직무매칭 탭 -->
+    <div class="tab-content" id="tab-match">
+      <div class="feat-big">
+        <div class="fb-tag">JOB MATCHING AI</div>
+        <div class="fb-title">용신·격국 기반<br>직무 매칭 Top 3</div>
+        <div class="fb-desc">단순 성향 테스트가 아닌, 사주의 '나에게 필요한 기운(용신)'과 '나의 그릇(격국)'을 기반으로 8대 직군과 정밀 매칭합니다.</div>
+        <div class="fb-visual">
+          <div class="jm-mini">
+            <div class="jm-row"><div class="jm-elem" style="background:rgba(201,75,61,.2);color:#C94B3D">火</div><span class="jm-title-mini">크리에이티브 디렉터</span><span class="jm-score-mini">97%</span></div>
+            <div class="jm-row"><div class="jm-elem" style="background:rgba(61,122,74,.2);color:#3D7A4A">木</div><span class="jm-title-mini">글로벌 마케터</span><span class="jm-score-mini">90%</span></div>
+            <div class="jm-row"><div class="jm-elem" style="background:rgba(46,95,138,.2);color:#2E5F8A">水</div><span class="jm-title-mini">콘텐츠 프로듀서</span><span class="jm-score-mini">84%</span></div>
+          </div>
+          <div style="margin-top:10px;padding:8px;border-radius:8px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.15)">
+            <div style="font-size:9px;color:rgba(255,255,255,.35);margin-bottom:3px">AI 분석 이유</div>
+            <div style="font-size:10.5px;color:rgba(255,255,255,.6);line-height:1.6">火의 표현 에너지와 상관격의 창의성이 결합 → 콘텐츠·브랜드 방향 최적</div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">🗂️</div>
+        <div class="fs-title">8대 직군 DB</div>
+        <div class="fs-desc">기획·기술·예술·영업·연구·교육·관리·서비스 전 직군 매핑. 총 120개+ 세부 직무 포함.</div>
+        <span class="fs-pill">120개+ 직무</span>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">📊</div>
+        <div class="fs-title">PDF 상세 리포트</div>
+        <div class="fs-desc">4페이지 분량 전문 리포트. 성격 분석·직무 매칭·90일 실천 플랜 포함. 즉시 다운로드.</div>
+        <span class="fs-pill">PDF 출력</span>
+      </div>
+    </div>
+
+    <!-- 캘린더 탭 -->
+    <div class="tab-content" id="tab-cal">
+      <div class="feat-big">
+        <div class="fb-tag">FORTUNE CALENDAR</div>
+        <div class="fb-title">면접·계약·창업<br>길일 알림 캘린더</div>
+        <div class="fb-desc">월별 운의 흐름을 시각화하고, 이직 서류 제출·면접·계약에 유리한 날을 푸시 알림으로 안내합니다.</div>
+        <div class="fb-visual">
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:10px;color:rgba(255,255,255,.4)">2026년 5월</span>
+              <span style="font-size:9px;color:var(--gold)">▶ 면접 길일 3일</span>
+            </div>
+            <div class="cal-mini-grid">
+              <div class="cm-wk">일</div><div class="cm-wk">월</div><div class="cm-wk">화</div><div class="cm-wk">수</div><div class="cm-wk">목</div><div class="cm-wk">금</div><div class="cm-wk">토</div>
+              <div class="cm-day dim"></div><div class="cm-day dim"></div><div class="cm-day dim"></div><div class="cm-day dim"></div><div class="cm-day">1</div><div class="cm-day">2</div><div class="cm-day">3</div>
+              <div class="cm-day">4</div><div class="cm-day">5</div><div class="cm-day">6</div><div class="cm-day">7</div><div class="cm-day gold">8</div><div class="cm-day">9</div><div class="cm-day">10</div>
+              <div class="cm-day">11</div><div class="cm-day">12</div><div class="cm-day">13</div><div class="cm-day">14</div><div class="cm-day">15</div><div class="cm-day">16</div><div class="cm-day">17</div>
+              <div class="cm-day">18</div><div class="cm-day">19</div><div class="cm-day today">20</div><div class="cm-day">21</div><div class="cm-day gold">22</div><div class="cm-day">23</div><div class="cm-day">24</div>
+              <div class="cm-day">25</div><div class="cm-day">26</div><div class="cm-day">27</div><div class="cm-day gold">28</div><div class="cm-day">29</div><div class="cm-day">30</div><div class="cm-day">31</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <div style="flex:1;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:7px;padding:7px 8px;font-size:9px;color:var(--gold-lt)">🌟 22일<br>면접 최고 길일</div>
+            <div style="flex:1;background:rgba(46,95,138,.08);border:1px solid rgba(46,95,138,.2);border-radius:7px;padding:7px 8px;font-size:9px;color:#8BB4D4">📝 28일<br>계약·서류 추천</div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">🔔</div>
+        <div class="fs-title">맞춤 푸시 알림</div>
+        <div class="fs-desc">면접·계약·이직 등 상황별로 길일에 앞서 알림을 발송. 중요한 순간을 놓치지 않도록.</div>
+        <span class="fs-pill">알림 커스텀</span>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">📆</div>
+        <div class="fs-title">일정 등록 연동</div>
+        <div class="fs-desc">면접·시험 일정을 직접 등록하면 그 날의 운세와 준비 TIP을 미리 제공합니다.</div>
+        <span class="fs-pill">일정 연동</span>
+      </div>
+    </div>
+
+    <!-- 대운 탭 -->
+    <div class="tab-content" id="tab-daewoon">
+      <div class="feat-big">
+        <div class="fb-tag">DAEWOON TIMELINE</div>
+        <div class="fb-title">10년 단위 대운<br>커리어 로드맵</div>
+        <div class="fb-desc">단기 운세를 넘어 10년 단위 대운(大運) 흐름을 분석합니다. 창업·이직·진학의 최적 시기를 장기적으로 파악하세요.</div>
+        <div class="fb-visual">
+          <div class="dw-mini">
+            <div class="dw-pill"><div class="dw-hanja" style="color:#3D7A4A">甲</div><div class="dw-hanja" style="color:#3D7A4A">寅</div><div class="dw-age">13세~</div></div>
+            <div class="dw-pill"><div class="dw-hanja" style="color:#C94B3D">丙</div><div class="dw-hanja" style="color:#C94B3D">辰</div><div class="dw-age">23세~</div></div>
+            <div class="dw-pill dw-current"><div class="dw-hanja" style="color:#C9A84C">丁</div><div class="dw-hanja" style="color:#C9A84C">巳</div><div class="dw-age">33세~ ▶</div></div>
+            <div class="dw-pill"><div class="dw-hanja" style="color:#8B6914">戊</div><div class="dw-hanja" style="color:#8B6914">午</div><div class="dw-age">43세~</div></div>
+            <div class="dw-pill"><div class="dw-hanja" style="color:#7A8090">己</div><div class="dw-hanja" style="color:#7A8090">未</div><div class="dw-age">53세~</div></div>
+          </div>
+          <div style="margin-top:10px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:9px 11px">
+            <div style="font-size:9px;color:var(--gold-lt);margin-bottom:3px">▶ 현재 대운 해석</div>
+            <div style="font-size:10.5px;color:rgba(255,255,255,.6);line-height:1.6">丁巳 대운 — 火 기운 최고조. 창의적 도전과 네트워크 확장에 최적의 10년.</div>
+          </div>
+        </div>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">📈</div>
+        <div class="fs-title">3년 운세 예측</div>
+        <div class="fs-desc">대운과 세운(年運)을 교차 분석하여 향후 3년간의 커리어 변화 시점을 예측합니다.</div>
+        <span class="fs-pill">연간 세운 포함</span>
+      </div>
+      <div class="feat-sm">
+        <div class="fs-icon">🎯</div>
+        <div class="fs-title">창업·이직 시기 분석</div>
+        <div class="fs-desc">용신 운이 강해지는 시기를 포착하여 대형 결정의 최적 타이밍을 제안합니다.</div>
+        <span class="fs-pill">의사결정 지원</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 인터랙티브 오행 자가 진단 ═══ -->
+<section class="quiz-section">
+  <div class="s-max">
+    <div class="s-eyebrow">QUICK SELF-TEST</div>
+    <h2 class="s-h2">나의 오행은? <em>30초 자가 진단</em></h2>
+    <p class="s-sub">질문 4개로 나의 지배 오행과 성향을 빠르게 파악해보세요.</p>
+    <div class="s-bar" style="background:var(--gold)"></div>
+
+    <div class="quiz-wrap">
+      <div class="quiz-progress" id="quiz-prog">
+        <div class="qp-step active"></div>
+        <div class="qp-step"></div>
+        <div class="qp-step"></div>
+        <div class="qp-step"></div>
+      </div>
+
+      <div id="quiz-questions">
+        <div class="quiz-q" id="q-title"></div>
+        <div class="quiz-hint" id="q-hint"></div>
+        <div class="quiz-opts" id="q-opts"></div>
+        <div class="quiz-nav">
+          <button class="q-btn-skip" onclick="skipQ()">건너뛰기</button>
+          <button class="q-btn-next" id="q-next" disabled onclick="nextQ()">다음 →</button>
+        </div>
+      </div>
+
+      <div class="quiz-result" id="quiz-result">
+        <div class="qr-elem" id="qr-elem"></div>
+        <div class="qr-persona" id="qr-persona"></div>
+        <div class="qr-desc" id="qr-desc"></div>
+        <div class="qr-jobs" id="qr-jobs"></div>
+        <div style="margin-top:4px">
+          <button class="qr-cta" onclick="sendPrompt('운트 정식 사주 분석 시작하기 — 오행 자가진단 완료')">정식 사주 분석하기 ↗</button>
+          <button class="qr-retry" onclick="resetQuiz()">다시 풀기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS TIMELINE ═══ -->
+<section class="hiw-section">
+  <div class="s-max">
+    <div class="s-eyebrow">HOW IT WORKS</div>
+    <h2 class="s-h2">사용 흐름 — <em>단 3분</em></h2>
+    <p class="s-sub">복잡한 사주를 몰라도 괜찮습니다. 생년월일시만 있으면 됩니다.</p>
+    <div class="s-bar"></div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-icon">📅</span>
+            <div class="tl-head">
+              <div class="tl-title">생년월일시 입력</div>
+              <div class="tl-time">약 30초</div>
+            </div>
+          </div>
+          <div class="tl-desc">이름·생년월일·태어난 시간·성별·현재 상황을 입력합니다. 별도 회원가입 없이 즉시 시작 가능.</div>
+          <div class="tl-tags"><span class="tl-tag">간편 입력</span><span class="tl-tag">비회원 가능</span></div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-icon">☯</span>
+            <div class="tl-head">
+              <div class="tl-title">AI 만세력 자동 분석</div>
+              <div class="tl-time">약 10초</div>
+            </div>
+          </div>
+          <div class="tl-desc">사주 원국(년·월·일·시), 오행 분포, 격국, 용신, 10년 대운 흐름까지 자동으로 산출합니다.</div>
+          <div class="tl-tags"><span class="tl-tag">만세력 알고리즘</span><span class="tl-tag">격국·용신</span><span class="tl-tag">대운 분석</span></div>
+          <div class="tl-highlight">✦ Claude AI가 분석 결과를 현대 커리어 언어로 재해석</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-icon">🎯</span>
+            <div class="tl-head">
+              <div class="tl-title">직무 매칭 & 페르소나</div>
+              <div class="tl-time">즉시</div>
+            </div>
+          </div>
+          <div class="tl-desc">용신·격국 기반으로 나에게 맞는 직무 Top 3를 제안하고, 나만의 커리어 페르소나 카드를 발급합니다.</div>
+          <div class="tl-tags"><span class="tl-tag">직무 Top 3</span><span class="tl-tag">페르소나 카드</span><span class="tl-tag">SNS 공유</span></div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot">4</div>
+        <div class="tl-card">
+          <div class="tl-top">
+            <span class="tl-icon">📄</span>
+            <div class="tl-head">
+              <div class="tl-title">상세 리포트 PDF 다운로드</div>
+              <div class="tl-time">PRO 기능</div>
+            </div>
+          </div>
+          <div class="tl-desc">4페이지 분량의 전문 리포트 — 성격 분석·AI 진로 조언·직무 매칭·90일 실천 플랜이 담긴 PDF를 즉시 다운로드.</div>
+          <div class="tl-tags"><span class="tl-tag">4페이지 PDF</span><span class="tl-tag">90일 액션플랜</span><span class="tl-tag">전문가 상담 연결</span></div>
+          <div class="tl-highlight">✦ 명리학자 + 커리어 코치 1:1 패키지 상담 연결 가능</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const Qs = [
+  {
+    q: "일이 잘 풀릴 때 나는 어떤 방식으로 접근하나요?",
+    hint: "가장 자연스럽게 나오는 나의 모습을 선택하세요",
+    opts: [
+      { e:"🔥", t:"열정적으로 밀어붙인다", d:"흥분되면 멈출 수 없어요", v:"火" },
+      { e:"🌿", t:"차근차근 키워나간다", d:"조급하지 않고 성장을 즐겨요", v:"木" },
+      { e:"💧", t:"깊이 파고들어 완성한다", d:"완벽해질 때까지 연구해요", v:"水" },
+      { e:"⚔️", t:"정밀하게 분석하고 판단한다", d:"데이터와 논리가 좋아요", v:"金" },
+    ]
+  },
+  {
+    q: "팀 프로젝트에서 나는 주로 어떤 역할인가요?",
+    hint: "가장 자주 맡게 되는 역할",
+    opts: [
+      { e:"💡", t:"아이디어 뱅크", d:"새로운 방향을 제시하는 창의형", v:"火" },
+      { e:"🌱", t:"분위기 메이커", d:"팀의 성장과 조화를 이끄는 타입", v:"木" },
+      { e:"🗂️", t:"전략 설계자", d:"구조와 계획을 잡아주는 역할", v:"金" },
+      { e:"🤝", t:"중재자·연결자", d:"사람과 자원을 연결해주는 타입", v:"土" },
+    ]
+  },
+  {
+    q: "커리어에서 가장 중요하게 생각하는 가치는?",
+    hint: "솔직하게 내 마음에 드는 것을 선택",
+    opts: [
+      { e:"🎨", t:"창의성과 표현", d:"내 아이디어로 세상을 바꾸고 싶어요", v:"火" },
+      { e:"📈", t:"성장과 영향력", d:"꾸준히 커지는 나를 원해요", v:"木" },
+      { e:"🔬", t:"전문성과 깊이", d:"한 분야의 최고 전문가가 목표", v:"水" },
+      { e:"💰", t:"안정성과 보상", d:"확실한 성과와 인정이 중요해요", v:"金" },
+    ]
+  },
+  {
+    q: "스트레스를 받을 때 나의 회복 방식은?",
+    hint: "가장 자연스럽게 하게 되는 것",
+    opts: [
+      { e:"🎶", t:"음악·영상·창작 활동", d:"만들거나 감상하면 회복돼요", v:"火" },
+      { e:"🚶", t:"산책·자연 속에서 혼자 시간", d:"천천히 걷다보면 정리돼요", v:"木" },
+      { e:"📚", t:"책·공부·새로운 지식 탐구", d:"알게 될수록 안정이 돼요", v:"水" },
+      { e:"👥", t:"친구들과 대화·사교 활동", d:"사람이 있어야 에너지가 채워져요", v:"土" },
+    ]
+  },
+];
+
+let cur = 0, sel = [], scores = {火:0,木:0,水:0,金:0,土:0};
+
+function renderQ() {
+  const q = Qs[cur];
+  document.getElementById('q-title').textContent = `Q${cur+1}. ${q.q}`;
+  document.getElementById('q-hint').textContent = q.hint;
+  document.getElementById('q-next').disabled = true;
+
+  const prog = document.getElementById('quiz-prog').children;
+  for (let i = 0; i < prog.length; i++) {
+    prog[i].className = 'qp-step' + (i < cur ? ' done' : i === cur ? ' active' : '');
+  }
+
+  const optsEl = document.getElementById('q-opts');
+  optsEl.innerHTML = q.opts.map((o,i) =>
+    `<button class="quiz-opt${sel[cur]===i?' selected':''}" onclick="selectOpt(${i})">
+      <span class="qo-emoji">${o.e}</span>
+      <div class="qo-title">${o.t}</div>
+      <div class="qo-desc">${o.d}</div>
+    </button>`
+  ).join('');
+}
+
+function selectOpt(i) {
+  sel[cur] = i;
+  document.getElementById('q-next').disabled = false;
+  document.querySelectorAll('.quiz-opt').forEach((el,idx) => {
+    el.classList.toggle('selected', idx === i);
+  });
+}
+
+function nextQ() {
+  if (sel[cur] !== undefined) scores[Qs[cur].opts[sel[cur]].v]++;
+  cur++;
+  if (cur >= Qs.length) { showResult(); return; }
+  renderQ();
+}
+
+function skipQ() { cur++; if (cur >= Qs.length) { showResult(); return; } renderQ(); }
+
+function showResult() {
+  document.getElementById('quiz-questions').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'block';
+  const prog = document.getElementById('quiz-prog').children;
+  for (let i = 0; i < prog.length; i++) prog[i].className = 'qp-step done';
+
+  const top = Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+  const DATA = {
+    '火': { emoji:'🔥', persona:'창조적 열정가', desc:'불꽃처럼 타오르는 에너지로 새로운 것을 만들어냅니다. 표현력과 창의성이 탁월하며 사람들을 매혹시키는 능력이 있습니다.', jobs:['크리에이티브 디렉터','콘텐츠 기획자','브랜드 마케터'] },
+    '木': { emoji:'🌿', persona:'성장 추구형 기획가', desc:'꾸준히 성장하며 주변을 이끕니다. 장기적 비전과 조화로운 관계 구축에 강점이 있습니다.', jobs:['UX 디자이너','서비스 기획자','스타트업 창업가'] },
+    '水': { emoji:'💧', persona:'깊이 있는 연구자', desc:'본질을 꿰뚫는 통찰력과 끝없는 탐구심. 전문성으로 승부하는 사람입니다.', jobs:['데이터 사이언티스트','연구원','에듀테크 기획자'] },
+    '金': { emoji:'⚔️', persona:'정밀한 전략가', desc:'논리와 데이터로 최적해를 찾아냅니다. 분석과 실행 모두 탁월한 전략형입니다.', jobs:['데이터 분석가','재무 기획','IT 아키텍트'] },
+    '土': { emoji:'🪨', persona:'신뢰받는 조율가', desc:'사람과 자원을 연결하는 탁월한 중재력. 안정적이고 신뢰받는 중심 인물입니다.', jobs:['프로젝트 매니저','HR 전문가','전략 컨설턴트'] },
+  };
+  const d = DATA[top];
+  document.getElementById('qr-elem').textContent = top;
+  document.getElementById('qr-elem').style.color = {火:'#C94B3D',木:'#3D7A4A',水:'#2E5F8A',金:'#7A8090',土:'#8B6914'}[top];
+  document.getElementById('qr-persona').textContent = d.persona;
+  document.getElementById('qr-desc').textContent = d.desc;
+  document.getElementById('qr-jobs').innerHTML = d.jobs.map(j=>`<span class="qr-job">${j}</span>`).join('');
+}
+
+function resetQuiz() {
+  cur = 0; sel = []; scores = {火:0,木:0,水:0,金:0,土:0};
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-questions').style.display = 'block';
+  renderQ();
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+renderQ();
+</script>

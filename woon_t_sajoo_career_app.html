@@ -1,0 +1,1023 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --gold-dark: #8B6914;
+    --ink: #1A1A2E;
+    --ink-mid: #2D2D4E;
+    --paper: #FAF8F2;
+    --paper-mid: #F0EDE0;
+    --muted: #8A8070;
+    --accent-fire: #C94B3D;
+    --accent-water: #2E5F8A;
+    --accent-wood: #3D7A4A;
+    --accent-metal: #7A8090;
+    --accent-earth: #8B6914;
+    --border: rgba(201,168,76,0.25);
+    --radius: 12px;
+  }
+
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+  .app-shell {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--paper);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ─── HEADER ─── */
+  .app-header {
+    background: var(--ink);
+    padding: 20px 20px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .app-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .logo-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .logo-sub {
+    font-size: 10px;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+    margin-top: -2px;
+  }
+  .header-badge {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    margin-top: 4px;
+  }
+  .nav-tab {
+    flex: 1;
+    padding: 12px 4px 10px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .nav-tab i { display: block; font-size: 18px; margin-bottom: 3px; }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ─── CONTENT ─── */
+  .page { display: none; flex: 1; overflow-y: auto; padding: 20px; }
+  .page.active { display: block; }
+
+  /* ─── HOME PAGE ─── */
+  .luck-score-card {
+    background: var(--ink);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .luck-score-card::after {
+    content: '☯';
+    position: absolute;
+    right: 20px; bottom: -10px;
+    font-size: 80px;
+    opacity: 0.06;
+    color: #fff;
+  }
+  .luck-date { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .luck-label { font-size: 13px; color: var(--gold-light); margin-bottom: 8px; }
+  .luck-score { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .luck-score .score-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 52px;
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .luck-score .score-denom { font-size: 14px; color: rgba(255,255,255,0.4); }
+  .luck-bar-wrap { background: rgba(255,255,255,0.08); border-radius: 4px; height: 6px; margin-bottom: 10px; }
+  .luck-bar { height: 6px; border-radius: 4px; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); width: 76%; }
+  .luck-desc { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+  .luck-keywords {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;
+  }
+  .luck-keyword {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--gold-light);
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .section-title::before {
+    content: '';
+    width: 3px; height: 16px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  /* JOB CARDS */
+  .job-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .job-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .job-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .job-card-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .job-element {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .el-fire { background: rgba(201,75,61,0.1); color: var(--accent-fire); }
+  .el-water { background: rgba(46,95,138,0.1); color: var(--accent-water); }
+  .el-wood { background: rgba(61,122,74,0.1); color: var(--accent-wood); }
+  .el-metal { background: rgba(122,128,144,0.1); color: var(--accent-metal); }
+  .el-earth { background: rgba(139,105,20,0.1); color: var(--accent-earth); }
+  .job-match {
+    font-size: 11px; color: var(--gold-dark);
+    font-weight: 500;
+  }
+  .job-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .job-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* DAILY TIP */
+  .daily-tip {
+    background: linear-gradient(135deg, rgba(61,122,74,0.06), rgba(46,95,138,0.06));
+    border: 1px solid rgba(61,122,74,0.2);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .tip-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .tip-label { font-size: 10px; color: var(--accent-wood); font-weight: 500; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .tip-text { font-size: 13px; color: var(--ink-mid); line-height: 1.65; }
+
+  /* ─── SAJU PAGE ─── */
+  .input-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .input-card h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .form-group { flex: 1; }
+  .form-label { font-size: 11px; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.3px; }
+  .form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    cursor: pointer;
+  }
+  .analyze-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s;
+    margin-top: 4px;
+  }
+  .analyze-btn:hover { opacity: 0.85; }
+
+  /* RESULT PANEL */
+  .result-panel { display: none; }
+  .result-panel.show { display: block; }
+
+  .persona-card {
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-seal {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .persona-type { font-size: 11px; color: var(--gold-light); letter-spacing: 1px; margin-bottom: 4px; }
+  .persona-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .persona-desc { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* OHAENG CHART */
+  .ohaeng-wrap {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .ohaeng-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .ohaeng-bars { display: flex; flex-direction: column; gap: 10px; }
+  .ohaeng-row { display: flex; align-items: center; gap: 10px; }
+  .ohaeng-label { width: 52px; font-size: 12px; color: var(--muted); flex-shrink: 0; display: flex; align-items: center; gap: 4px; }
+  .ohaeng-label .el-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ohaeng-bar-track { flex: 1; background: var(--paper-mid); border-radius: 4px; height: 8px; }
+  .ohaeng-bar-fill { height: 8px; border-radius: 4px; transition: width 0.8s ease; }
+  .ohaeng-val { width: 28px; font-size: 11px; color: var(--muted); text-align: right; }
+
+  /* YONGSIN */
+  .yongsin-card {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .yongsin-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .yongsin-badge {
+    background: var(--gold);
+    color: var(--ink);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .yongsin-name { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .yongsin-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── CALENDAR PAGE ─── */
+  .cal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .cal-month {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .cal-nav { background: none; border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; font-size: 14px; color: var(--muted); display: flex; align-items: center; justify-content: center; }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin-bottom: 16px;
+  }
+  .cal-weekday { text-align: center; font-size: 10px; color: var(--muted); padding: 6px 0; }
+  .cal-day {
+    text-align: center;
+    padding: 8px 2px;
+    font-size: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--ink);
+    position: relative;
+    transition: background 0.15s;
+  }
+  .cal-day:hover { background: var(--paper-mid); }
+  .cal-day.today { background: var(--ink); color: var(--gold); font-weight: 600; }
+  .cal-day.lucky {
+    font-weight: 500;
+  }
+  .cal-day .luck-dot {
+    display: block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin: 2px auto 0;
+  }
+  .luck-dot.high { background: var(--gold); }
+  .luck-dot.mid { background: var(--accent-wood); }
+  .luck-dot.low { background: var(--paper-mid); }
+
+  /* LEGEND */
+  .cal-legend { display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* EVENT LIST */
+  .event-list { display: flex; flex-direction: column; gap: 8px; }
+  .event-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .event-date {
+    text-align: center;
+    flex-shrink: 0;
+    width: 38px;
+  }
+  .event-date .ed-day { font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1; }
+  .event-date .ed-month { font-size: 10px; color: var(--muted); }
+  .event-content { flex: 1; }
+  .event-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .event-type {
+    display: inline-block;
+    font-size: 10px;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-weight: 500;
+  }
+  .et-interview { background: rgba(61,122,74,0.1); color: var(--accent-wood); }
+  .et-contract { background: rgba(46,95,138,0.1); color: var(--accent-water); }
+  .et-caution { background: rgba(201,75,61,0.1); color: var(--accent-fire); }
+
+  /* ─── CONSULTING PAGE ─── */
+  .expert-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .expert-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex; gap: 14px; align-items: flex-start;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .expert-card:hover { border-color: var(--gold); }
+  .expert-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    background: var(--paper-mid);
+  }
+  .expert-name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+  .expert-role { font-size: 11px; color: var(--gold-dark); margin-bottom: 6px; }
+  .expert-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+  .expert-tag {
+    background: var(--paper-mid);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .expert-footer { display: flex; align-items: center; justify-content: space-between; }
+  .expert-price { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .expert-price span { font-size: 10px; font-weight: 400; color: var(--muted); }
+  .expert-rating { font-size: 11px; color: var(--muted); }
+
+  .book-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--ink);
+    color: var(--gold);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* PACKAGE BANNER */
+  .package-banner {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .package-icon { font-size: 28px; flex-shrink: 0; }
+  .package-label { font-size: 10px; color: var(--gold-light); letter-spacing: 0.5px; margin-bottom: 3px; }
+  .package-title { font-family: 'Noto Serif KR', serif; font-size: 15px; color: #fff; font-weight: 600; margin-bottom: 4px; }
+  .package-desc { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-spacer { height: 20px; }
+
+  /* RADAR SVG */
+  .radar-wrap { display: flex; justify-content: center; margin: 16px 0 0; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink);
+    color: var(--gold-light);
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .spacer { height: 12px; }
+</style>
+
+<h2 class="sr-only">운트(Woon-T) — 사주 기반 맞춤형 진로 상담 플랫폼</h2>
+<div class="toast" id="toast">📅 예약이 완료되었습니다</div>
+
+<div class="app-shell">
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-mark">運</div>
+        <div>
+          <div class="logo-text">운트</div>
+          <div class="logo-sub">WOON-T · MY LUCK & TALENT</div>
+        </div>
+      </div>
+      <div class="header-badge">PRO 멤버</div>
+    </div>
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="switchPage('home',this)">
+        <i class="ti ti-home"></i>홈
+      </div>
+      <div class="nav-tab" onclick="switchPage('saju',this)">
+        <i class="ti ti-yin-yang"></i>내 사주
+      </div>
+      <div class="nav-tab" onclick="switchPage('calendar',this)">
+        <i class="ti ti-calendar"></i>운세 캘린더
+      </div>
+      <div class="nav-tab" onclick="switchPage('consult',this)">
+        <i class="ti ti-users"></i>상담소
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
+    <!-- 오늘의 행운 점수 -->
+    <div class="luck-score-card" style="margin-top:16px;">
+      <div class="luck-date">2026년 5월 20일 수요일 · 甲午日</div>
+      <div class="luck-label">오늘의 행운 지수</div>
+      <div class="luck-score">
+        <span class="score-num">76</span>
+        <span class="score-denom">/ 100</span>
+      </div>
+      <div class="luck-bar-wrap">
+        <div class="luck-bar" style="width:76%"></div>
+      </div>
+      <div class="luck-desc">火의 기운이 강한 날입니다. 새로운 제안에 적극적으로 임하고, 오후에는 창의적 작업에 집중하면 좋습니다.</div>
+      <div class="luck-keywords">
+        <span class="luck-keyword">✓ 네트워킹</span>
+        <span class="luck-keyword">✓ 기획 발표</span>
+        <span class="luck-keyword">△ 계약 서명 주의</span>
+      </div>
+    </div>
+
+    <!-- 추천 직무 -->
+    <div class="section-title">나에게 맞는 직무</div>
+    <div class="job-grid">
+      <div class="job-card" onclick="switchPage('saju',document.querySelectorAll('.nav-tab')[1])">
+        <div class="job-card-top">
+          <div class="job-element el-fire">火</div>
+          <span class="job-match">98% 매칭</span>
+        </div>
+        <div class="job-title">크리에이티브 디렉터</div>
+        <div class="job-desc">상관격의 창의적 에너지를 살린 최적 직군</div>
+      </div>
+      <div class="job-card">
+        <div class="job-card-top">
+          <div class="job-element el-wood">木</div>
+          <span class="job-match">91% 매칭</span>
+        </div>
+        <div class="job-title">브랜드 기획자</div>
+        <div class="job-desc">장기 비전과 성장을 이끄는 전략 기획</div>
+      </div>
+      <div class="job-card">
+        <div class="job-card-top">
+          <div class="job-element el-water">水</div>
+          <span class="job-match">84% 매칭</span>
+        </div>
+        <div class="job-title">글로벌 마케터</div>
+        <div class="job-desc">역마의 기운으로 국제 무대에서 활약</div>
+      </div>
+      <div class="job-card">
+        <div class="job-card-top">
+          <div class="job-element el-earth">土</div>
+          <span class="job-match">78% 매칭</span>
+        </div>
+        <div class="job-title">콘텐츠 프로듀서</div>
+        <div class="job-desc">중재와 조율 능력이 빛나는 제작 분야</div>
+      </div>
+    </div>
+
+    <!-- 오늘의 팁 -->
+    <div class="section-title">오늘의 커리어 조언</div>
+    <div class="daily-tip">
+      <div class="tip-icon">🌿</div>
+      <div>
+        <div class="tip-label">木 기운 보충 TIP</div>
+        <div class="tip-text">오늘은 午火가 강해 과열되기 쉽습니다. 초록색 소품을 곁에 두거나 자연광 아래서 업무를 처리하면 木의 기운이 火를 조절해줍니다. 오후 2-4시에 중요한 미팅을 잡으세요.</div>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- SAJU PAGE -->
+  <div class="page" id="page-saju">
+    <div class="spacer"></div>
+    <div class="input-card">
+      <h3>생년월일시 입력</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">생년월일</div>
+          <input type="date" class="form-input" id="birth-date" value="1993-07-15">
+        </div>
+        <div class="form-group">
+          <div class="form-label">태어난 시</div>
+          <select class="form-select" id="birth-hour">
+            <option>자시 (23:30-01:30)</option>
+            <option>축시 (01:30-03:30)</option>
+            <option>인시 (03:30-05:30)</option>
+            <option>묘시 (05:30-07:30)</option>
+            <option>진시 (07:30-09:30)</option>
+            <option>사시 (09:30-11:30)</option>
+            <option selected>오시 (11:30-13:30)</option>
+            <option>미시 (13:30-15:30)</option>
+            <option>신시 (15:30-17:30)</option>
+            <option>유시 (17:30-19:30)</option>
+            <option>술시 (19:30-21:30)</option>
+            <option>해시 (21:30-23:30)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">성별</div>
+          <select class="form-select">
+            <option>여성</option>
+            <option>남성</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">현재 상황</div>
+          <select class="form-select">
+            <option>취업 준비</option>
+            <option>이직 고민</option>
+            <option>창업 계획</option>
+            <option>N잡 탐색</option>
+          </select>
+        </div>
+      </div>
+      <button class="analyze-btn" onclick="showResult()">✦ 사주 분석 시작</button>
+    </div>
+
+    <div class="result-panel" id="result-panel">
+      <!-- 페르소나 카드 -->
+      <div class="persona-card">
+        <div class="persona-seal">🦋</div>
+        <div class="persona-type">나의 사주 캐릭터</div>
+        <div class="persona-name">창조적 탐험가</div>
+        <div class="persona-desc">丁火 일간 · 상관격<br>불꽃처럼 타오르는 창의성과 자유로운 영혼.<br>새로운 영역을 개척하는 선구자 유형.</div>
+      </div>
+
+      <!-- 오행 분포 -->
+      <div class="ohaeng-wrap">
+        <div class="ohaeng-title">오행(五行) 분포 분석</div>
+        <div class="ohaeng-bars">
+          <div class="ohaeng-row">
+            <div class="ohaeng-label"><div class="el-dot" style="background:var(--accent-fire)"></div>火(불)</div>
+            <div class="ohaeng-bar-track"><div class="ohaeng-bar-fill" style="width:68%;background:var(--accent-fire)"></div></div>
+            <div class="ohaeng-val">68%</div>
+          </div>
+          <div class="ohaeng-row">
+            <div class="ohaeng-label"><div class="el-dot" style="background:var(--accent-wood)"></div>木(나무)</div>
+            <div class="ohaeng-bar-track"><div class="ohaeng-bar-fill" style="width:42%;background:var(--accent-wood)"></div></div>
+            <div class="ohaeng-val">42%</div>
+          </div>
+          <div class="ohaeng-row">
+            <div class="ohaeng-label"><div class="el-dot" style="background:var(--accent-water)"></div>水(물)</div>
+            <div class="ohaeng-bar-track"><div class="ohaeng-bar-fill" style="width:25%;background:var(--accent-water)"></div></div>
+            <div class="ohaeng-val">25%</div>
+          </div>
+          <div class="ohaeng-row">
+            <div class="ohaeng-label"><div class="el-dot" style="background:var(--accent-earth)"></div>土(흙)</div>
+            <div class="ohaeng-bar-track"><div class="ohaeng-bar-fill" style="width:18%;background:var(--accent-earth)"></div></div>
+            <div class="ohaeng-val">18%</div>
+          </div>
+          <div class="ohaeng-row">
+            <div class="ohaeng-label"><div class="el-dot" style="background:var(--accent-metal)"></div>金(쇠)</div>
+            <div class="ohaeng-bar-track"><div class="ohaeng-bar-fill" style="width:12%;background:var(--accent-metal)"></div></div>
+            <div class="ohaeng-val">12%</div>
+          </div>
+        </div>
+
+        <!-- 레이더 차트 -->
+        <div class="radar-wrap">
+          <svg width="180" height="160" viewBox="0 0 180 160">
+            <defs>
+              <style>
+                .radar-axis { stroke: rgba(26,26,46,0.12); stroke-width: 0.5; }
+                .radar-ring { fill: none; stroke: rgba(26,26,46,0.08); stroke-width: 0.5; }
+                .radar-area { fill: rgba(201,75,61,0.15); stroke: var(--accent-fire); stroke-width: 1.5; }
+                .radar-label { font-family: 'Noto Sans KR', sans-serif; font-size: 10px; fill: var(--muted); }
+              </style>
+            </defs>
+            <!-- rings -->
+            <polygon points="90,10 152,47 152,113 90,150 28,113 28,47" class="radar-ring"/>
+            <polygon points="90,35 131,58 131,102 90,125 49,102 49,58" class="radar-ring"/>
+            <polygon points="90,58 112,70 112,90 90,102 68,90 68,70" class="radar-ring"/>
+            <!-- axes -->
+            <line x1="90" y1="10" x2="90" y2="150" class="radar-axis"/>
+            <line x1="152" y1="47" x2="28" y2="113" class="radar-axis"/>
+            <line x1="152" y1="113" x2="28" y2="47" class="radar-axis"/>
+            <!-- data (Fire68 Wood42 Water25 Earth18 Metal12) -->
+            <polygon points="90,26 127,62 111,97 80,106 60,80" class="radar-area"/>
+            <!-- labels -->
+            <text x="90" y="7" text-anchor="middle" class="radar-label">火</text>
+            <text x="159" y="50" class="radar-label">木</text>
+            <text x="155" y="118" class="radar-label">水</text>
+            <text x="78" y="158" class="radar-label">土</text>
+            <text x="18" y="118" class="radar-label">金</text>
+            <text x="15" y="50" class="radar-label">木</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 용신 -->
+      <div class="yongsin-card">
+        <div class="yongsin-top">
+          <span class="yongsin-badge">용신(用神)</span>
+          <span class="yongsin-name">水 · 金 기운</span>
+        </div>
+        <div class="yongsin-desc">
+          火가 과다하여 水와 金으로 균형을 잡아야 합니다. <strong>데이터 기반 분석, 정밀한 기획, 금융·IT 분야</strong>를 부업이나 협업 파트너로 연결하면 시너지가 극대화됩니다.
+        </div>
+      </div>
+
+      <!-- 직무 매칭 리포트 -->
+      <div class="section-title">직무 매칭 리포트</div>
+      <div class="job-grid">
+        <div class="job-card">
+          <div class="job-card-top">
+            <div class="job-element el-fire">🏆</div>
+            <span class="job-match">최상</span>
+          </div>
+          <div class="job-title">크리에이티브 디렉터</div>
+          <div class="job-desc">상관의 창의 에너지가 가장 빛나는 분야</div>
+        </div>
+        <div class="job-card">
+          <div class="job-card-top">
+            <div class="job-element el-wood">🚀</div>
+            <span class="job-match">상위</span>
+          </div>
+          <div class="job-title">글로벌 마케터</div>
+          <div class="job-desc">역마살 → 해외 진출 특화 역량</div>
+        </div>
+        <div class="job-card">
+          <div class="job-card-top">
+            <div class="job-element el-water">💡</div>
+            <span class="job-match">추천</span>
+          </div>
+          <div class="job-title">콘텐츠 기획자</div>
+          <div class="job-desc">스토리텔링과 트렌드 감각의 결합</div>
+        </div>
+        <div class="job-card">
+          <div class="job-card-top">
+            <div class="job-element el-earth">🌱</div>
+            <span class="job-match">보완</span>
+          </div>
+          <div class="job-title">스타트업 창업</div>
+          <div class="job-desc">2027-2028년 창업운 고점 도래</div>
+        </div>
+      </div>
+
+      <div class="bottom-spacer"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR PAGE -->
+  <div class="page" id="page-calendar">
+    <div class="spacer"></div>
+    <div class="cal-header">
+      <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month" id="cal-month-label">2026년 5월</div>
+      <button class="cal-nav" onclick="changeMonth(1)">›</button>
+    </div>
+
+    <div class="cal-grid" id="cal-grid">
+      <!-- JS fills this -->
+    </div>
+
+    <div class="cal-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>행운 최고조</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent-wood)"></div>이직/면접 길일</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--paper-mid);border:1px solid #ccc;"></div>주의 필요</div>
+    </div>
+
+    <div class="section-title">이달의 주요 운세 일정</div>
+    <div class="event-list">
+      <div class="event-item">
+        <div class="event-date"><div class="ed-day">22</div><div class="ed-month">5월</div></div>
+        <div class="event-content">
+          <div class="event-title">면접·발표 최고 길일 ⭐</div>
+          <span class="event-type et-interview">면접 운</span>
+        </div>
+      </div>
+      <div class="event-item">
+        <div class="event-date"><div class="ed-day">28</div><div class="ed-month">5월</div></div>
+        <div class="event-content">
+          <div class="event-title">계약·서류 제출 추천일</div>
+          <span class="event-type et-contract">계약 운</span>
+        </div>
+      </div>
+      <div class="event-item">
+        <div class="event-date"><div class="ed-day">31</div><div class="ed-month">5월</div></div>
+        <div class="event-content">
+          <div class="event-title">큰 결정 지양, 재충전 권장</div>
+          <span class="event-type et-caution">주의 일</span>
+        </div>
+      </div>
+      <div class="event-item">
+        <div class="event-date"><div class="ed-day">4</div><div class="ed-month">6월</div></div>
+        <div class="event-content">
+          <div class="event-title">사업·창업 시작 길일 🌟</div>
+          <span class="event-type et-contract">창업 운</span>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+
+  <!-- CONSULT PAGE -->
+  <div class="page" id="page-consult">
+    <div class="spacer"></div>
+    <!-- 패키지 배너 -->
+    <div class="package-banner">
+      <div class="package-icon">🎯</div>
+      <div>
+        <div class="package-label">RECOMMENDED PACKAGE</div>
+        <div class="package-title">명리 + 커리어 통합 패키지</div>
+        <div class="package-desc">사주 적성 분석 후 해당 분야 실무 멘토와 1:1 전략 상담까지</div>
+      </div>
+    </div>
+
+    <div class="section-title">전문가 상담</div>
+    <div class="expert-grid">
+      <div class="expert-card">
+        <div class="expert-avatar">🔮</div>
+        <div style="flex:1">
+          <div class="expert-name">김명철 명리학자</div>
+          <div class="expert-role">대한명리학회 정회원 · 15년 경력</div>
+          <div class="expert-tags">
+            <span class="expert-tag">진로 특화</span>
+            <span class="expert-tag">사주 분석</span>
+            <span class="expert-tag">대운 해석</span>
+          </div>
+          <div class="expert-footer">
+            <div>
+              <div class="expert-price">50,000원 <span>/ 60분</span></div>
+              <div class="expert-rating">⭐ 4.9 (리뷰 238개)</div>
+            </div>
+            <button class="book-btn" onclick="showToast('김명철 명리학자 예약 완료!')">예약</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="expert-card">
+        <div class="expert-avatar">💼</div>
+        <div style="flex:1">
+          <div class="expert-name">박지연 커리어 코치</div>
+          <div class="expert-role">前 삼성 HR · 커리어 전환 전문</div>
+          <div class="expert-tags">
+            <span class="expert-tag">이직 전략</span>
+            <span class="expert-tag">취업 코칭</span>
+            <span class="expert-tag">스타트업</span>
+          </div>
+          <div class="expert-footer">
+            <div>
+              <div class="expert-price">60,000원 <span>/ 60분</span></div>
+              <div class="expert-rating">⭐ 4.8 (리뷰 185개)</div>
+            </div>
+            <button class="book-btn" onclick="showToast('박지연 코치 예약 완료!')">예약</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="expert-card">
+        <div class="expert-avatar">🌏</div>
+        <div style="flex:1">
+          <div class="expert-name">이수현 글로벌 멘토</div>
+          <div class="expert-role">실리콘밸리 출신 · 해외 취업 특화</div>
+          <div class="expert-tags">
+            <span class="expert-tag">역마살 특화</span>
+            <span class="expert-tag">해외 취업</span>
+            <span class="expert-tag">영어 면접</span>
+          </div>
+          <div class="expert-footer">
+            <div>
+              <div class="expert-price">80,000원 <span>/ 60분</span></div>
+              <div class="expert-rating">⭐ 5.0 (리뷰 92개)</div>
+            </div>
+            <button class="book-btn" onclick="showToast('이수현 멘토 예약 완료!')">예약</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+</div>
+
+<script>
+  function switchPage(id, tabEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (tabEl) tabEl.classList.add('active');
+  }
+
+  function showResult() {
+    const panel = document.getElementById('result-panel');
+    panel.classList.add('show');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = '📅 ' + msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Calendar
+  let currentYear = 2026, currentMonth = 4; // 0-indexed May
+
+  const luckyDays = {
+    '2026-4': [3,7,10,15,22,28],
+    '2026-3': [2,8,13,19,24,29],
+  };
+  const cautionDays = { '2026-4': [5,12,25,31], '2026-3': [6,18,27] };
+
+  function buildCalendar(y, m) {
+    const grid = document.getElementById('cal-grid');
+    const label = document.getElementById('cal-month-label');
+    label.textContent = y + '년 ' + (m+1) + '월';
+    grid.innerHTML = '';
+
+    const weekdays = ['일','월','화','수','목','금','토'];
+    weekdays.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-weekday';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m+1, 0).getDate();
+    const key = y + '-' + m;
+    const lucky = luckyDays[key] || [];
+    const caution = cautionDays[key] || [];
+    const today = new Date();
+    const isCurrentMonth = today.getFullYear() === y && today.getMonth() === m;
+    const todayDate = today.getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const blank = document.createElement('div');
+      grid.appendChild(blank);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.innerHTML = d;
+
+      if (isCurrentMonth && d === todayDate) el.classList.add('today');
+
+      const dot = document.createElement('span');
+      dot.className = 'luck-dot';
+      if (lucky.includes(d)) {
+        dot.classList.add('high');
+        el.classList.add('lucky');
+      } else if (caution.includes(d)) {
+        dot.classList.add('low');
+        el.style.opacity = '0.6';
+      } else {
+        dot.classList.add('mid');
+      }
+      el.appendChild(dot);
+      grid.appendChild(el);
+    }
+  }
+
+  function changeMonth(delta) {
+    currentMonth += delta;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    buildCalendar(currentYear, currentMonth);
+  }
+
+  buildCalendar(currentYear, currentMonth);
+</script>
