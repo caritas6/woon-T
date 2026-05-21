@@ -123,8 +123,9 @@ export default function SignupPage() {
             </button>
 
             <p className="text-center text-[10px] text-white/20 leading-relaxed">
-              가입하면 <Link href="#" className="text-white/40 hover:text-white/60">이용약관</Link> 및{" "}
-              <Link href="#" className="text-white/40 hover:text-white/60">개인정보처리방침</Link>에 동의합니다
+              가입하면{" "}
+              <Link href="/terms" className="text-white/40 hover:text-white/60 underline underline-offset-2">이용약관</Link>{" "}및{" "}
+              <Link href="/privacy" className="text-white/40 hover:text-white/60 underline underline-offset-2">개인정보처리방침</Link>에 동의합니다
             </p>
 
             <p className="text-center text-[11px] text-white/30">
