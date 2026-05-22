@@ -63,8 +63,8 @@ const TOSS_CLIENT_KEY =
   process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ?? "test_ck_placeholder";
 
 async function requestTossPayment(plan: Plan, user: { email: string; nickname: string | null }) {
-  // @tosspayments/tosspayments-js 동적 임포트 (Next.js 번들 최적화)
-  const { loadTossPayments } = await import("@tosspayments/tosspayments-js");
+  // TossPayments SDK — CDN 로더 (브라우저 전용)
+  const { loadTossPayments } = await import("@/lib/toss");
   const toss = await loadTossPayments(TOSS_CLIENT_KEY);
 
   const orderId   = `woont-${plan.id}-${Date.now()}`;

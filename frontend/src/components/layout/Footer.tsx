@@ -22,20 +22,43 @@ export default function Footer() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-xs">
             <div>
               <p className="text-white/30 mb-2 tracking-widest text-[10px] uppercase">서비스</p>
-              {["무료 사주 분석", "진로 리포트", "운세 캘린더", "전문가 상담"].map((t) => (
-                <Link key={t} href="#" className="block text-white/50 hover:text-gold py-0.5 transition-colors">{t}</Link>
+              {[
+                { label: "무료 사주 분석", href: "/analyze" },
+                { label: "진로 리포트",   href: "/dashboard" },
+                { label: "운세 캘린더",   href: "/calendar" },
+                { label: "전문가 상담",   href: "/consultation" },
+              ].map(({ label, href }) => (
+                <Link key={label} href={href}
+                  className="block text-white/50 hover:text-gold py-0.5 transition-colors">
+                  {label}
+                </Link>
               ))}
             </div>
             <div>
               <p className="text-white/30 mb-2 tracking-widest text-[10px] uppercase">회사</p>
-              {["소개", "블로그", "채용", "파트너십"].map((t) => (
-                <Link key={t} href="#" className="block text-white/50 hover:text-gold py-0.5 transition-colors">{t}</Link>
+              {[
+                { label: "소개",    href: "/#features" },
+                { label: "블로그",  href: "#" },
+                { label: "채용",    href: "#" },
+                { label: "파트너십", href: "#" },
+              ].map(({ label, href }) => (
+                <Link key={label} href={href}
+                  className="block text-white/50 hover:text-gold py-0.5 transition-colors">
+                  {label}
+                </Link>
               ))}
             </div>
             <div>
               <p className="text-white/30 mb-2 tracking-widest text-[10px] uppercase">법적</p>
-              {["개인정보처리방침", "이용약관", "쿠키 정책"].map((t) => (
-                <Link key={t} href="#" className="block text-white/50 hover:text-gold py-0.5 transition-colors">{t}</Link>
+              {[
+                { label: "개인정보처리방침", href: "/privacy" },
+                { label: "이용약관",       href: "/terms" },
+                { label: "쿠키 정책",      href: "/privacy#cookies" },
+              ].map(({ label, href }) => (
+                <Link key={label} href={href}
+                  className="block text-white/50 hover:text-gold py-0.5 transition-colors">
+                  {label}
+                </Link>
               ))}
             </div>
           </div>

@@ -105,6 +105,17 @@ export interface MonthlyCalendar {
   monthly_avg: number;
 }
 
+// ── 사전 설문 ────────────────────────────────────────────────────────────
+
+export interface SurveyData {
+  currentField:   string;    // 현재 직군
+  careerYears:    string;    // 경력 연수
+  interestFields: string[];  // 관심 분야 (복수, 최대 3)
+  mainConcern:    string;    // 주요 고민
+  strengths:      string[];  // 강점 (복수, 최대 3)
+  additionalNote: string;    // 자유 입력
+}
+
 // ── 인증 ────────────────────────────────────────────────────────────────
 
 export interface TokenResponse {

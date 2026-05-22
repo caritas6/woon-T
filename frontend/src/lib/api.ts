@@ -1,7 +1,7 @@
 import axios from "axios";
 import type {
   SajuResult, CareerReport, MonthlyCalendar,
-  TokenResponse, User, DailyFortune,
+  TokenResponse, User, DailyFortune, SurveyData,
 } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
@@ -59,12 +59,19 @@ export const authApi = {
 // ── Saju ────────────────────────────────────────────────────────────────
 
 export const sajuApi = {
-  quick: (birthDate: string, gender: "M" | "F", birthHour?: number | null, situation?: string) =>
+  quick: (
+    birthDate:  string,
+    gender:     "M" | "F",
+    birthHour?: number | null,
+    situation?: string,
+    survey?:    SurveyData | null,
+  ) =>
     api.post<SajuResult>("/saju/quick", {
       birth_date: birthDate,
       gender,
       birth_hour: birthHour ?? null,
       situation,
+      survey: survey ?? null,
     }),
 
   calculate: (birthDate: string, gender: "M" | "F", birthHour?: number | null, situation?: string) =>
@@ -76,6 +83,9 @@ export const sajuApi = {
     }),
 
   profiles: () => api.get<SajuResult[]>("/saju/profiles"),
+
+  getProfile: (profileId: string) =>
+    api.get<SajuResult>(`/saju/profile/${profileId}`),
 };
 
 // ── Career ──────────────────────────────────────────────────────────────

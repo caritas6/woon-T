@@ -63,10 +63,10 @@ export default function DashboardPage() {
             <div className="bg-white/[0.04] border border-gold/20 rounded-2xl p-5">
               <p className="text-[10px] text-white/30 tracking-wider mb-3">나의 사주 페르소나</p>
               <div className="flex items-center gap-3">
-                <div className="text-3xl">{sajuResult.persona.emoji}</div>
+                <div className="text-3xl">{sajuResult.persona?.emoji ?? "☯"}</div>
                 <div>
-                  <p className="font-serif text-base font-bold text-white">{sajuResult.persona.name}</p>
-                  <p className="text-[11px] text-gold/70">일간 {sajuResult.ilgan} · {sajuResult.gyeokguk}</p>
+                  <p className="font-serif text-base font-bold text-white">{sajuResult.persona?.name ?? "-"}</p>
+                  <p className="text-[11px] text-gold/70">일간 {sajuResult.ilgan ?? "-"} · {sajuResult.gyeokguk ?? "-"}</p>
                 </div>
               </div>
             </div>
@@ -74,12 +74,15 @@ export default function DashboardPage() {
             {/* 상위 직무 */}
             <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-5">
               <p className="text-[10px] text-white/30 tracking-wider mb-3">최적 직무 매칭</p>
-              {sajuResult.career_matches.slice(0, 2).map((m, i) => (
-                <div key={m.title} className="flex items-center justify-between py-1.5">
-                  <span className="text-xs text-white/70">{i + 1}. {m.title}</span>
-                  <span className="text-xs font-bold text-gold">{m.score}%</span>
-                </div>
-              ))}
+              {(sajuResult.career_matches ?? []).length > 0
+                ? (sajuResult.career_matches ?? []).slice(0, 2).map((m, i) => (
+                    <div key={m.title ?? i} className="flex items-center justify-between py-1.5">
+                      <span className="text-xs text-white/70">{i + 1}. {m.title}</span>
+                      <span className="text-xs font-bold text-gold">{m.score}%</span>
+                    </div>
+                  ))
+                : <p className="text-xs text-white/30 py-2">사주 분석 후 확인하세요</p>
+              }
             </div>
           </div>
         ) : (
@@ -95,7 +98,7 @@ export default function DashboardPage() {
         {/* 퀵 링크 */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { href: "/analyze",      icon: "☯",  label: "사주 분석" },
+            { href: "/analyze",      icon: "☯",  label: "사주 분석", taiji: true },
             { href: "/calendar",     icon: "📅", label: "운세 캘린더" },
             { href: "/consultation", icon: "💬", label: "전문가 상담" },
             { href: "/",             icon: "🏠",  label: "홈으로" },
@@ -103,7 +106,16 @@ export default function DashboardPage() {
             <Link key={l.href} href={l.href}
               className="bg-white/[0.04] border border-white/10 rounded-xl p-4 text-center
                          hover:border-gold/30 hover:bg-white/[0.07] transition-all">
-              <span className="text-2xl block mb-1.5">{l.icon}</span>
+              {l.taiji ? (
+                <span className="text-3xl block mb-1.5 select-none" style={{
+                  background: "linear-gradient(135deg, #C9A84C 0%, #F5D98B 50%, #C9A84C 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 0 8px rgba(201,168,76,0.6))",
+                }}>☯</span>
+              ) : (
+                <span className="text-2xl block mb-1.5">{l.icon}</span>
+              )}
               <span className="text-xs text-white/55">{l.label}</span>
             </Link>
           ))}

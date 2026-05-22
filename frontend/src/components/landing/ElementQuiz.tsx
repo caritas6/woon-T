@@ -124,7 +124,13 @@ export default function ElementQuiz() {
           {/* 인트로 */}
           {step === "intro" && (
             <div className="text-center animate-fade-in">
-              <div className="text-6xl mb-5">☯</div>
+              <div className="text-7xl mb-5 select-none"
+                style={{
+                  background: "linear-gradient(135deg, #C9A84C 0%, #F5D98B 50%, #C9A84C 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 0 16px rgba(201,168,76,0.55))",
+                }}>☯</div>
               <h3 className="font-serif text-xl font-bold text-white mb-3">오행 원소 자가진단</h3>
               <p className="text-sm text-white/50 mb-8 leading-relaxed">
                 5가지 질문에 솔직하게 답하면 나의 주도적인 오행 기운과<br/>

@@ -70,11 +70,11 @@ export default function HeroSection() {
             </div>
 
             {/* 통계 */}
-            <div className="flex gap-0 justify-center lg:justify-start flex-wrap">
+            <div className="flex gap-0 justify-center lg:justify-start">
               {STATS.map((s, i) => (
-                <div key={s.label} className={`px-6 text-center ${i < STATS.length - 1 ? "border-r border-white/10" : ""}`}>
-                  <span className="font-serif text-2xl text-white font-bold block">{s.num}</span>
-                  <span className="text-[10px] text-white/35 tracking-wider mt-1 block">{s.label}</span>
+                <div key={s.label} className={`px-4 sm:px-6 text-center ${i < STATS.length - 1 ? "border-r border-white/10" : ""}`}>
+                  <span className="font-serif text-xl sm:text-2xl text-white font-bold block">{s.num}</span>
+                  <span className="text-[9px] sm:text-[10px] text-white/35 tracking-wider mt-1 block">{s.label}</span>
                 </div>
               ))}
             </div>

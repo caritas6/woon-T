@@ -24,17 +24,7 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // API 리다이렉트 (개발 환경 CORS 우회)
-  async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
-    if (process.env.NODE_ENV !== "development") return [];
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${apiUrl}/:path*`,
-      },
-    ];
-  },
+  // API는 Next.js Route Handler(/src/app/api/)가 직접 처리하므로 rewrites 불필요
 };
 
 export default nextConfig;

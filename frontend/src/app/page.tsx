@@ -1,12 +1,13 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import HeroSection from "@/components/landing/HeroSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import ElementQuiz from "@/components/landing/ElementQuiz";
-import PricingSection from "@/components/landing/PricingSection";
-import ExpertsSection from "@/components/landing/ExpertsSection";
-import FaqSection from "@/components/landing/FaqSection";
-import CtaSection from "@/components/landing/CtaSection";
+import { Navbar, Footer } from "@/components/layout";
+import {
+  HeroSection,
+  FeaturesSection,
+  ElementQuiz,
+  PricingSection,
+  ExpertsSection,
+  FaqSection,
+  CtaSection,
+} from "@/components/landing";
 
 export default function LandingPage() {
   return (

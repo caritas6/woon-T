@@ -94,12 +94,13 @@ function ElementBars({ elements, yongsin }: { elements: SajuResult["elements"]; 
   );
 }
 
-function DaeunTimeline({ list }: { list: SajuResult["daeun_list"] }) {
-  const currentAge = new Date().getFullYear() - 1990; // approximate; real logic needs birthYear
+function DaeunTimeline({ list, birthYear }: { list: SajuResult["daeun_list"]; birthYear: number }) {
+  // 세는 나이(한국식): 현재연도 - 출생연도 + 1
+  const currentAge = new Date().getFullYear() - birthYear + 1;
   return (
     <div className="overflow-x-auto pb-2">
       <div className="flex gap-2 min-w-max">
-        {list.slice(0, 8).map((d, i) => {
+        {list.slice(0, 11).map((d, i) => {
           const meta    = ELEM[d.element];
           const isCur   = d.start_age <= currentAge && currentAge < d.start_age + 10;
           return (
@@ -369,7 +370,9 @@ export default function ResultPage() {
   const id     = params?.id as string;
 
   const { user, setSajuResult } = useStore();
-  const storeResult = useStore((s) => s.sajuResult);
+  const storeResult  = useStore((s) => s.sajuResult);
+  const birthDate    = useStore((s) => s.onboarding.birthDate);
+  const birthYear    = birthDate ? parseInt(birthDate.split("-")[0], 10) : new Date().getFullYear() - 30;
 
   const [pageResult, setPageResult] = useState<SajuResult | null>(storeResult ?? null);
   const [fetching,   setFetching]   = useState(false);
@@ -379,23 +382,25 @@ export default function ResultPage() {
   useEffect(() => {
     if (pageResult?.profile_id === id) return; // 이미 맞는 결과
 
-    if (user) {
-      // 로그인 상태: 프로필 목록에서 해당 id 검색
-      setFetching(true);
-      sajuApi.profiles()
-        .then(({ data }) => {
-          const found = data.find((p) => p.profile_id === id);
-          if (found) { setPageResult(found); setSajuResult(found); }
-          else setFetchErr("해당 분석 결과를 찾을 수 없습니다.");
-        })
-        .catch(() => setFetchErr("결과를 불러오지 못했습니다."))
-        .finally(() => setFetching(false));
-    } else if (storeResult) {
-      // 비로그인 + store에 결과 있음: URL만 동기화
-      router.replace(`/result/${storeResult.profile_id}`);
-    }
+    setFetching(true);
+    setFetchErr(null);
+
+    sajuApi.getProfile(id)
+      .then(({ data }) => {
+        setPageResult(data);
+        setSajuResult(data); // 스토어에도 저장
+      })
+      .catch(() => {
+        if (storeResult && storeResult.profile_id !== id) {
+          // 스토어에 다른 결과가 있으면 해당 결과로 이동
+          router.replace(`/result/${storeResult.profile_id}`);
+        } else {
+          setFetchErr("분석 결과를 찾을 수 없습니다.");
+        }
+      })
+      .finally(() => setFetching(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, user]);
+  }, [id]);
 
   // 로딩
   if (fetching) {
@@ -557,7 +562,7 @@ export default function ResultPage() {
         {daeun_list.length > 0 && (
           <div className="bg-white/[0.04] border border-white/10 rounded-3xl p-5">
             <p className="text-[10px] text-white/30 tracking-wider mb-4">대운 흐름 (大運)</p>
-            <DaeunTimeline list={daeun_list} />
+            <DaeunTimeline list={daeun_list} birthYear={birthYear} />
           </div>
         )}
 
