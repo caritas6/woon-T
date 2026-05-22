@@ -1,78 +1,119 @@
 /**
- * 파일 기반 유저 스토어 — data/users.json
- * Node.js 런타임 전용 (Edge 불가)
+ * Supabase 기반 유저 스토어 (영구 PostgreSQL)
+ * 이전: 파일 기반 /tmp/data/users.json (Vercel cold-start 시 초기화됨)
+ * 이후: Supabase PostgreSQL — 배포/재시작과 무관하게 영구 보존
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
-import { join }        from "node:path";
-import { randomUUID }  from "node:crypto";
+import { createClient } from "@supabase/supabase-js";
+import { randomUUID }   from "node:crypto";
 import { hashPassword } from "./auth";
 
 export interface StoredUser {
-  id: string;
-  email: string;
-  passwordHash: string;
-  nickname: string;
+  id:                string;
+  email:             string;
+  passwordHash:      string;
+  nickname:          string;
   subscription_tier: "free" | "pro" | "premium";
-  is_verified: boolean;
-  createdAt: string;
+  is_verified:       boolean;
+  createdAt:         string;
 }
 
-const DATA_DIR   = process.env.VERCEL ? "/tmp/data" : join(process.cwd(), "data");
-const USERS_FILE = join(DATA_DIR, "users.json");
-
-function readUsers(): StoredUser[] {
-  try {
-    if (!existsSync(USERS_FILE)) return [];
-    return JSON.parse(readFileSync(USERS_FILE, "utf-8")) as StoredUser[];
-  } catch {
-    return [];
-  }
+// Supabase DB row (snake_case)
+interface UserRow {
+  id:                string;
+  email:             string;
+  password_hash:     string;
+  nickname:          string;
+  subscription_tier: "free" | "pro" | "premium";
+  is_verified:       boolean;
+  created_at:        string;
 }
 
-function writeUsers(users: StoredUser[]): void {
-  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-  writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
+function getClient() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error("Supabase 환경변수(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)가 설정되지 않았습니다.");
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+function rowToUser(row: UserRow): StoredUser {
+  return {
+    id:                row.id,
+    email:             row.email,
+    passwordHash:      row.password_hash,
+    nickname:          row.nickname,
+    subscription_tier: row.subscription_tier,
+    is_verified:       row.is_verified,
+    createdAt:         row.created_at,
+  };
 }
 
 /** 회원가입 */
 export async function registerUser(
   email: string,
   password: string,
-  nickname?: string
+  nickname?: string,
 ): Promise<StoredUser> {
-  const users = readUsers();
-  if (users.some((u) => u.email === email)) {
-    throw new Error("이미 사용 중인 이메일입니다.");
-  }
-  const user: StoredUser = {
-    id:                randomUUID(),
-    email,
-    passwordHash:      await hashPassword(password),
-    nickname:          nickname?.trim() || email.split("@")[0],
-    subscription_tier: "free",
-    is_verified:       false,
-    createdAt:         new Date().toISOString(),
-  };
-  writeUsers([...users, user]);
-  return user;
+  const sb = getClient();
+
+  // 이메일 중복 확인
+  const { data: existing } = await sb
+    .from("users")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (existing) throw new Error("이미 사용 중인 이메일입니다.");
+
+  const { data, error } = await sb
+    .from("users")
+    .insert({
+      id:                randomUUID(),
+      email,
+      password_hash:     await hashPassword(password),
+      nickname:          nickname?.trim() || email.split("@")[0],
+      subscription_tier: "free",
+      is_verified:       false,
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return rowToUser(data as UserRow);
 }
 
 /** 로그인 검증 */
 export async function loginUser(
   email: string,
-  password: string
+  password: string,
 ): Promise<StoredUser | null> {
-  const users = readUsers();
-  const user  = users.find((u) => u.email === email);
-  if (!user) return null;
+  const sb = getClient();
+
+  const { data } = await sb
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (!data) return null;
+
   const hash = await hashPassword(password);
-  if (user.passwordHash !== hash) return null;
-  return user;
+  if ((data as UserRow).password_hash !== hash) return null;
+
+  return rowToUser(data as UserRow);
 }
 
 /** ID로 유저 조회 */
-export function getUserById(id: string): StoredUser | null {
-  return readUsers().find((u) => u.id === id) ?? null;
+export async function getUserById(id: string): Promise<StoredUser | null> {
+  const sb = getClient();
+
+  const { data } = await sb
+    .from("users")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (!data) return null;
+  return rowToUser(data as UserRow);
 }
 
 /** 응답용 공개 유저 객체 */

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ detail: "유효하지 않거나 만료된 refresh token입니다." }, { status: 401 });
     }
 
-    const user = getUserById(payload.sub as string);
+    const user = await getUserById(payload.sub as string);
     if (!user) {
       return NextResponse.json({ detail: "사용자를 찾을 수 없습니다." }, { status: 404 });
     }
