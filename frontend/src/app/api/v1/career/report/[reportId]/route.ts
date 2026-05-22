@@ -5,7 +5,9 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-const REPORTS_DIR = join(process.cwd(), "data", "reports");
+const REPORTS_DIR = process.env.VERCEL
+  ? "/tmp/reports"
+  : join(process.cwd(), "data", "reports");
 
 export async function GET(
   _req: Request,
