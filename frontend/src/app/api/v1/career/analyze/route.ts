@@ -6,8 +6,8 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 
-const REPORTS_DIR  = join(process.cwd(), "data", "reports");
-const PROFILES_DIR = join(process.cwd(), "data", "profiles");
+const REPORTS_DIR  = process.env.VERCEL ? "/tmp/reports"  : join(process.cwd(), "data", "reports");
+const PROFILES_DIR = process.env.VERCEL ? "/tmp/profiles" : join(process.cwd(), "data", "profiles");
 
 function ensureDir(dir: string) {
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
@@ -15,21 +15,29 @@ function ensureDir(dir: string) {
 
 export async function POST(req: Request) {
   try {
-    const { saju_profile_id, situation } = await req.json() as {
+    const { saju_profile_id, situation, profile: inlineProfile } = await req.json() as {
       saju_profile_id?: string;
       situation?: string;
+      profile?: Record<string, unknown>;   // 클라이언트가 직접 전달한 프로필 데이터
     };
 
-    if (!saju_profile_id) {
-      return Response.json({ detail: "saju_profile_id가 필요합니다." }, { status: 422 });
+    if (!saju_profile_id && !inlineProfile) {
+      return Response.json({ detail: "saju_profile_id 또는 profile이 필요합니다." }, { status: 422 });
     }
 
     // ── 사주 프로필 로드 ─────────────────────────────────────────────────
-    const profilePath = join(PROFILES_DIR, `${saju_profile_id}.json`);
-    if (!existsSync(profilePath)) {
-      return Response.json({ detail: "사주 프로필을 찾을 수 없습니다." }, { status: 404 });
+    // 1순위: 요청 바디에 포함된 인라인 프로필 (Vercel 서버리스 환경에서 파일 접근 불가 대비)
+    // 2순위: 파일시스템에서 읽기 (로컬 개발)
+    let profile: Record<string, unknown>;
+    if (inlineProfile) {
+      profile = inlineProfile;
+    } else {
+      const profilePath = join(PROFILES_DIR, `${saju_profile_id}.json`);
+      if (!existsSync(profilePath)) {
+        return Response.json({ detail: "사주 프로필을 찾을 수 없습니다." }, { status: 404 });
+      }
+      profile = JSON.parse(readFileSync(profilePath, "utf-8"));
     }
-    const profile = JSON.parse(readFileSync(profilePath, "utf-8"));
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {

@@ -437,8 +437,11 @@ export async function POST(req: NextRequest) {
     };
 
     // ── 사주 프로필 파일 저장 (career/analyze에서 조회용) ────────────────
+    // Vercel 서버리스: /tmp 사용 (로컬: data/profiles)
     try {
-      const dir = join(process.cwd(), "data", "profiles");
+      const dir = process.env.VERCEL
+        ? "/tmp/profiles"
+        : join(process.cwd(), "data", "profiles");
       if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
       writeFileSync(
         join(dir, `${result.profile_id}.json`),

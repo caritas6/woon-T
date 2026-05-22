@@ -5,7 +5,9 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-const PROFILES_DIR = join(process.cwd(), "data", "profiles");
+const PROFILES_DIR = process.env.VERCEL
+  ? "/tmp/profiles"
+  : join(process.cwd(), "data", "profiles");
 
 export async function GET(
   _req: Request,

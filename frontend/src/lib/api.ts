@@ -91,10 +91,11 @@ export const sajuApi = {
 // ── Career ──────────────────────────────────────────────────────────────
 
 export const careerApi = {
-  analyze: (sajuProfileId: string, situation?: string) =>
+  analyze: (sajuProfileId: string, situation?: string, profile?: SajuResult | null) =>
     api.post<CareerReport>("/career/analyze", {
       saju_profile_id: sajuProfileId,
       situation,
+      profile: profile ?? undefined,   // 인라인 프로필 전달 (Vercel 파일시스템 우회)
     }),
 
   getReport: (reportId: string) =>

@@ -135,10 +135,11 @@ function DaeunTimeline({ list, birthYear }: { list: SajuResult["daeun_list"]; bi
   );
 }
 
-function AIAnalysis({ reportId, profileId, isLoggedIn }: {
+function AIAnalysis({ reportId, profileId, isLoggedIn, sajuProfile }: {
   reportId: string | null;
   profileId: string;
   isLoggedIn: boolean;
+  sajuProfile: SajuResult;
 }) {
   const [report,   setReport]   = useState<CareerReport | null>(null);
   const [localId,  setLocalId]  = useState<string | null>(reportId);
@@ -165,7 +166,7 @@ function AIAnalysis({ reportId, profileId, isLoggedIn }: {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await careerApi.analyze(profileId);
+      const { data } = await careerApi.analyze(profileId, undefined, sajuProfile);
       setLocalId(data.report_id);
       setReport(data);
     } catch {
@@ -573,6 +574,7 @@ export default function ResultPage() {
             reportId={null}
             profileId={sajuResult.profile_id}
             isLoggedIn={!!user}
+            sajuProfile={sajuResult}
           />
         </div>
 
