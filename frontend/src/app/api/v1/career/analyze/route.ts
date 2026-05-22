@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const { saju_profile_id, situation, profile: inlineProfile } = await req.json() as {
       saju_profile_id?: string;
       situation?: string;
-      profile?: Record<string, unknown>;   // 클라이언트가 직접 전달한 프로필 데이터
+      profile?: Record<string, any>;   // 클라이언트가 직접 전달한 프로필 데이터
     };
 
     if (!saju_profile_id && !inlineProfile) {
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     // ── 사주 프로필 로드 ─────────────────────────────────────────────────
     // 1순위: 요청 바디에 포함된 인라인 프로필 (Vercel 서버리스 환경에서 파일 접근 불가 대비)
     // 2순위: 파일시스템에서 읽기 (로컬 개발)
-    let profile: Record<string, unknown>;
+    let profile: Record<string, any>;
     if (inlineProfile) {
       profile = inlineProfile;
     } else {
