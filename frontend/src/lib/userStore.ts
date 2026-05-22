@@ -17,7 +17,7 @@ export interface StoredUser {
   createdAt: string;
 }
 
-const DATA_DIR   = join(process.cwd(), "data");
+const DATA_DIR   = process.env.VERCEL ? "/tmp/data" : join(process.cwd(), "data");
 const USERS_FILE = join(DATA_DIR, "users.json");
 
 function readUsers(): StoredUser[] {
